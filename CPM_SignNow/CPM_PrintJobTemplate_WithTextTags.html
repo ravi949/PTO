@@ -1,0 +1,357 @@
+<?xml version="1.0"?>
+<!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
+<pdf>
+<head>
+<#if .locale == "ru_RU">
+<link name="verdana" type="font" subtype="opentype"
+	src="${nsfont.verdana}" src-bold="${nsfont.verdana_bold}" bytes="2" />
+</#if>
+<!-- @@@ Adding header and footer to the document @@@ -->
+<macrolist> <macro id="nlheader">
+<table class="header" style="width: 100%;">
+	<tr>
+		<td rowspan="6" colspan="3"><#if companyInformation.logoUrl?length != 0><img
+			src="${companyInformation.logoUrl}"
+			style="height: 85%; width: 90%; margin: 7px; float: left;" /> </#if>
+		</td>
+		<td></td>
+		<td align="right" style="font-weight: bold; font-size: 13pt;">ESTIMATE</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td align="right" style="font-weight: bold; font-size: 11pt;">#${record.tranid}</td>
+	</tr>
+	<tr>
+		<th align="left">${record.custbody19@label}</th>
+		<td align="right">${record.custbody19}</td>
+	</tr>
+	<tr>
+		<th align="left">${record.custbodycsr@label}</th>
+		<td align="right">${record.custbodycsr}</td>
+	</tr>
+	<tr>
+		<th align="left">${record.custbodyest@label}</th>
+		<td align="right">${record.custbodyest}</td>
+	</tr>
+</table>
+</macro> <macro id="nlfooter">
+<table class="footer" style="width: 100%;">
+	<tr>
+		<td></td>
+		<td style="padding-left: 250px;"><pagenumber /> of <totalpages /><br/></td>
+	</tr>
+	<tr><td></td><td style="margin-top:20px;padding-left: 220px;font-size:8pt">{{t:i;r:n;o:"Client";h:20;}}</td></tr>
+</table>
+</macro> </macrolist>
+<style type="text/css">
+table { <#if .locale == "zh_CN"> font-family:stsong, sans-serif; <#elseif
+	.locale == "zh_TW"> font-family:msung, sans-serif; <#elseif .locale ==
+	"ja_JP"> font-family:heiseimin, sans-serif; <#elseif .locale ==
+	"ko_KR"> font-family:hygothic, sans-serif; <#elseif .locale == "ru_RU">
+	font-family:verdana; <#else > font-family:sans-serif; </#if > font-size:9pt;
+	table-layout: fixed;
+}
+
+th {
+	font-weight: bold;
+	font-size: 9pt;
+	padding: 2px 0px;
+	background-color: #e3e3e3;
+	color: #333333;
+}
+
+td {
+	padding: 2px 0px;
+}
+
+b {
+	font-weight: bold;
+	color: #333333;
+}
+
+table.header td {
+	padding: 2px 0px;
+	font-size: 10pt;
+}
+
+table.footer td {
+	padding: 0px;
+	font-size: 8pt;
+}
+
+table.itemtable th {
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+table.lineitems td {
+	font-size: 7pt;
+}
+
+table.lineitems th {
+	font-size: 7pt;
+}
+
+table.details td {
+	padding-left: 5px;
+}
+
+table.body td {
+	padding-top: 2px;
+}
+
+table.total {
+	page-break-inside: avoid;
+}
+
+tr.totalrow {
+	background-color: #e3e3e3;
+	line-height: 200%;
+}
+
+td.totalboxtop {
+	font-size: 12pt;
+	background-color: #e3e3e3;
+}
+
+td.addressheader {
+	font-size: 14pt;
+	padding-top: 6px;
+	padding-bottom: 2px;
+}
+
+td.address {
+	padding-top: 8px;
+}
+
+td.address1 {
+	padding-left: 12px;
+}
+
+span.title {
+	font-size: 16pt;
+}
+
+span.number {
+	font-size: 16pt;
+}
+
+span.itemname {
+	font-weight: bold;
+	line-height: 150%;
+}
+
+hr {
+	width: 100%;
+	color: #d3d3d3;
+	background-color: #d3d3d3;
+	height: 1px;
+}
+.text-tags{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+</style>
+</head>
+<body header="nlheader" header-height="13%" footer="nlfooter"
+	footer-height="20pt" padding="0.5in 0.5in 0.5in 0.5in" size="Letter" onload="load()">
+	<table style="width: 100%; margin-top: 10px;">
+		<tr>
+			<th colspan="3" rowspan="1" style="padding-left: 5px;">${record.billaddress@label}</th>
+			<th colspan="3" rowspan="1">Ship To</th>
+		</tr>
+		<tr>
+			<td class="address" colspan="3" rowspan="3"><span
+				style="font-size: 12px;">${record.billaddress}</span></td>
+			<td class="address" colspan="3" rowspan="3"><span
+				style="font-size: 12px;">${record.shippingaddress_text}</span></td>
+		</tr>
+		<tr>
+		</tr>
+	</table>
+
+	<table class="details" style="width: 100%; margin-top: 10px;">
+		<tr>
+			<th colspan="6" style="background-color: #a6a6a6; padding-left: 5px;">Job
+				Details</th>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>Job #</th>
+			<td colspan="2">${record.tranid}</td>
+			<th>Custom Job#</th>
+			<td colspan="2">${record.custbody12}</td>
+		</tr>
+		<tr>
+			<th>Title</th>
+			<td colspan="2">${record.custbody18}</td>
+			<th></th>
+			<td></td>
+		</tr>
+		<tr>
+			<th>${record.entity@label}</th>
+			<td colspan="2">${record.entity}</td>
+			<th>${record.custbodyvndrawarder@label}</th>
+			<td colspan="2">${record.custbodyvndrawarder}</td>
+		</tr>
+		<tr>
+			<th>Job Specs</th> <#if record.memo?has_content>
+			<td colspan="4" style="min-height: 6em;">${record.memo}</td> </#if>
+			<#if record.memo == "">
+			<td colspan="4"></td> </#if>
+			<td></td>
+		</tr>
+		<tr>
+			<td></td> <#if record.memo?has_content>
+			<td colspan="4"></td> </#if> <#if record.memo == "">
+			<td colspan="4" style="min-height: 6em;">${record.memo}</td> </#if>
+			<td></td>
+		</tr>
+		<tr>
+			<th>Format</th>
+			<td colspan="2">${record.custbody_cpm_printjob_format}</td>
+			<!-- add total revenue here -->
+			<th>Est. Total Revenue</th>
+			<td colspan="2">${record.projectedtotal}</td>
+		</tr>
+		<tr>
+			<th>${record.custbody_cpm_printjob_pagecount@label}</th>
+			<td colspan="2">${record.custbody_cpm_printjob_pagecount}</td>
+			<!-- add Total cost here -->
+			<th>Est. Extended Cost</th>
+			<td colspan="2">${record.totalcostestimate}</td>
+		</tr>
+		<tr>
+			<th>${record.custbody_cpm_printjob_versions@label}</th>
+			<td colspan="2">${record.custbody_cpm_printjob_versions}</td>
+			<th>Est. Gross Profit</th>
+			<td colspan="2">${record.estgrossprofit}</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td colspan="2"></td>
+			<th style="font-size: 7pt;" align="right">GP %</th>
+			<td colspan="2" style="font-size: 7pt;">${record.estgrossprofitpercent}</td>
+		</tr>
+		<tr>
+			<th>${record.custbody_cpm_printjob_equipment@label}</th>
+			<td colspan="2">${record.custbody_cpm_printjob_equipment}</td>
+			<th>${record.custbodyestqty@label}</th>
+			<td colspan="2">${record.custbodyestqty}</td>
+		</tr>
+		<tr>
+			<th>${record.custbodypprsupplied@label}</th>
+			<td colspan="2">${record.custbodypprsupplied}</td>
+			<th>${record.custbody_cpm_printjob_brcquantity@label}</th>
+			<td colspan="2">${record.custbody_cpm_printjob_brcquantity}</td>
+		</tr>
+	</table>
+
+	<#if record.item?has_content>
+	<table class="itemtable lineitems"
+		style="width: 100%; margin-top: 10px;">
+		<!-- start items -->
+		<#list record.item as item><#if item_index==0>
+		<tr>
+			<th colspan="11"
+				style="background-color: #a6a6a6; padding-left: 5px;">Items</th>
+		</tr>
+	</table>
+	<table class="itemtable lineitems" style="width: 100%;">
+		<thead>
+			<tr>
+				<!--<th align="center" style="width: 6%">${item.custcol_cpm_pj_include@label}</th>-->
+				<th align="left" style="width: 15%">${item.item@label}</th>
+				<th align="right" style="width: 10%">${item.quantity@label}</th>
+				<th align="center" style="width: 5%">${item.units@label}</th>
+				<th align="right" style="width: 15%">${item.rate@label}</th>
+				<th align="right" style="width: 15%">${item.amount@label}</th>
+				<th align="right" style="width: 15%">Unit Cost</th>
+				<th align="right" style="width: 15%">Cost</th>
+				<th align="center" style="width: 10%">Vendor</th>
+			</tr>
+		</thead>
+		</#if> <#if item.custcol_cpm_pj_include==true && (item.costestimate >
+		0 || item.amount > 0)>
+		<tr>
+			<!--<td align="center" style="width: 6%">${item.custcol_cpm_pj_include}</td>-->
+			<!--<td align="left" colspan="3" style="width: 20%; font-size: 7pt;">${item.item}</td>-->
+			<td align="left" style="width: 15%; font-size: 7pt;">${item.custcol_cpm_itemdisplayname}</td>
+			<td align="right" style="width: 10%">${item.quantity}</td>
+			<td align="center" style="width: 5%">${item.units}</td>
+			<td align="right" style="width: 15%">${item.rate?string["0.0000"]}</td>
+			<td align="right" style="width: 15%">${item.amount}</td>
+			<td align="right" style="width: 15%">${item.costestimaterate}</td>
+			<td align="right" style="width: 15%">${item.costestimate}</td>
+			<td align="left" style="width: 10%; padding-left: 3px">${item.custcolvendorselection}</td>
+		</tr>
+		</#if> </#list>
+		<!-- end items -->
+	</table>
+
+	</#if> <#if record.recmachcustrecord_cpm_paper_printjob?has_content>
+	<table class="itemtable lineitems"
+		style="width: 100%; margin-top: 10px;">
+		<!-- start items -->
+		<#list record.recmachcustrecord_cpm_paper_printjob as paperList> <#if
+		paperList_index==0>
+		<tr>
+			<th colspan="8" style="background-color: #a6a6a6; padding-left: 5px;">Paper</th>
+		</tr>
+		<tr>
+			<th class="address address1" colspan="3">Paper Allowance</th>
+			<th class="address address1" colspan="2">Actual Consumption</th>
+			<th class="address address1" colspan="3">(Over) / Under
+				Consumption</th>
+		</tr>
+		<tr>
+			<td class="address1" colspan="3">${record.custbodypaperallowance}</td>
+			<td class="address1" colspan="2">${record.custbodyactpaperconsumpt}</td>
+			<td class="address1" colspan="3">${record.custbodyouconsumpt}</td>
+		</tr>
+	</table>
+	<table class="itemtable lineitems"
+		style="width: 100%; margin-top: 1px;">
+		<thead>
+			<tr>
+				<th align="center">${paperList.custrecord_cpm_paper_included@label}</th>
+				<th align="left" colspan="3">${paperList.custrecord_cpm_paper_item@label}</th>
+				<th align="left" colspan="2">${paperList.custrecord_cpm_paper_allowance@label}</th>
+				<th align="left" colspan="2">Over / Under Consumption</th>
+			</tr>
+		</thead>
+		</#if> <#if paperList.custrecord_cpm_paper_included == true && paperList.custrecord_cpm_paper_allowance != 0>
+		<tr>
+			<td align="center">${paperList.custrecord_cpm_paper_included}</td>
+			<td align="left" colspan="3" style="font-size: 7pt;">${paperList.custrecord_cpm_paper_item}</td>
+			<td align="left" colspan="2">${paperList.custrecord_cpm_paper_allowance}</td>
+			<td align="left" colspan="2">${paperList.custrecord_cpm_paper_overunder}</td>
+		</tr>
+		</#if> </#list>
+		<!-- end items -->
+	</table>
+	</#if>
+	<br/>
+	<table>
+		<tr>
+			<td  class="text-tags">Name:</td>
+			<td  class="text-tags">{{t:t;r:y;o:"Client";l:"Name";w:100;h:15;}}</td>
+		</tr>
+		<tr>
+			<td  class="text-tags">Signature:</td>
+			<td  class="text-tags">{{t:s;r:y;o:"Client";w:100;h:15;}}</td>
+		</tr>
+		<tr>
+			<td  class="text-tags">Date:</td>
+			<td  class="text-tags">{{t:t;r:y;o:"Client";l:"Date";w:100;h:15;}}</td>
+		</tr>
+	</table>
+</body>
+</pdf>

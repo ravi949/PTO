@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html ng-app="printjobList">
+<head>
+<style type="text/css">
+div#body div#div__body {
+	padding: 5px !important;
+}
+#tr_fg_custom_htmlview td{
+	width: 100% !important
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 0.95000;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    border-color: #b8b7b7
+}
+
+#tbl_customize{
+    position: relative;
+    top: 10px;
+}
+.table_fields > tbody > tr:last-child > td > div.uir-field-wrapper:last-child{
+    padding-top: 7px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+</style>
+<meta charset="ISO-8859-1">
+<title>Print Job</title>
+</head>
+<body ng-controller="pjCtrl" ng-cloak>
+<br>
+	<table style="position: relative;left: 90%; width: 10%;">
+	<tr>
+			<!-- <td ><input id="custbody_pagination" type="button" value=" 1 to 25 "></td> -->
+			<td><select id="custbody_pagination">			
+					<option ng-repeat="i in pagination" value="{{$index}}" ng-selected="$index == selectIndex">{{i.start}} to {{i.end}}</option>
+			</select></td>
+			<td ><span style="font-size: initial;">Total:</span></td>
+			<td ><span style="font-size: initial;">{{TotalCount}}</span></td>
+		</tr>
+	</table>
+	<table id="div__labtab" style="table-layout: fixed" border="0"
+		cellspacing="0" class="listtable listborder openList uir-list-table"
+		cellpadding="0" width=100%">
+		<thead>
+			<tr class="uir-list-headerrow noprint" id="header">
+				<td height="100%" style="cursor: pointer; width: 49px;"
+					class="listheadertd listheadertextb uir-list-header-td">#</td>
+				<td height="100%" style="cursor: pointer; width: 178px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Title / Description</td>
+				<td height="100%" style="cursor: pointer; width: 85px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Project #</td>
+				<td height="100%" style="cursor: pointer; width: 67px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Format</td>
+				<td height="100%" style="cursor: pointer; width: 98px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Page Count</td>
+				<td height="100%" style="cursor: pointer; width: 138px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Estimated Quantity</td>
+				<td height="100%" style="cursor: pointer; width: 101px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					BRC Quantity</td>
+				<td height="100%" style="cursor: pointer; width: 264px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Job Specs</td>
+				<td height="100%" style="cursor: pointer; width: 115px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Files Due Date</td>
+				<td height="100%" style="cursor: pointer; width: 87px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Bind Date</td>
+				<td height="100%" style="cursor: pointer; width: 105px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					In-home Date</td>
+				<td height="100%" style="cursor: pointer; width: 116px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Proof Deadline</td>
+				<td height="100%" style="cursor: pointer; width: 86px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Print Date</td>
+				<td height="100%" style="cursor: pointer; width: 86px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Ship Date 1</td>
+				<td height="100%" style="cursor: pointer; width: 86px;"
+					class="listheadertd listheadertextb uir-list-header-td">
+					Ship Date 2</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="uir-list-row-tr uir-list-row-even" id="row0"
+				ng-repeat="list in pjList">
+				<td valign="top" class="listtext uir-list-row-cell" style=""><a
+					href="${PJList.pjurl}&pjid={{list.values.internalid[0].value}}"
+					target="_self" class="dottedlink">{{list.values.tranid}} </a></td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbody18}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbody12}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbody_cpm_printjob_format[0].text}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbody_cpm_printjob_pagecount[0].text}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodyestqty}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbody_cpm_printjob_brcquantity}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.memo}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodydtefiles}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodydtebind}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodydteiinhome}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodydteproof}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodydteprint}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodydteship1}}</td>
+				<td valign="top" class="listtext uir-list-row-cell" style="">{{list.values.custbodydteship2}}</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
+
+<script type="text/javascript">
+	angular.module('printjobList', []).controller(
+			'pjCtrl', function($scope) {
+				$scope.pjList = ${PJList.data};
+				$scope.selectIndex = ${PJList.pageIndex};
+				$scope.TotalCount = ${PJList.totalCount};
+				$scope.pages = ${PJList.pages};
+				
+				$scope.pagination = [];
+				if($scope.pages == 0)	
+					$scope.pagination.push({start:0,end:0});
+				
+	            else {
+					for (var v = 0; v < $scope.pages; v++) {
+						if ((v + 1) == $scope.pages)
+							$scope.pagination.push({
+								start : (v * 25) + 1,
+								end : $scope.TotalCount
+							});
+						else
+							$scope.pagination.push({
+								start : (v * 25) + 1,
+								end : (v * 25) + 25
+							});
+					}
+				}
+			})
+</script>
+
+</html>

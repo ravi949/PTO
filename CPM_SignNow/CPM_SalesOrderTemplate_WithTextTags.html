@@ -1,0 +1,421 @@
+<?xml version="1.0"?><!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
+<pdf>
+<head>
+<#if .locale == "ru_RU">
+    <link name="verdana" type="font" subtype="opentype" src="${nsfont.verdana}" src-bold="${nsfont.verdana_bold}" bytes="2" />
+</#if>
+    <macrolist>
+        <macro id="nlheader">
+            <table class="header" style="width: 100%;"><tr>
+	<td rowspan="3"><#if companyInformation.logoUrl?length != 0><img src="${companyInformation.logoUrl}" style="height: 85%; width: 90%; margin: 8pt; float: left;" /> </#if></td>
+	 <#if record.custbody_cpm_changeorder?length != 3>
+          <td align="right"><span class="title">PRINT ORDER</span></td>
+        </#if>
+        <#if record.custbody_cpm_changeorder?length != 2>
+         <td align="right"><span class="title">CHANGE ORDER</span></td>
+        </#if>
+	</tr>
+	<tr>
+	<td align="right"><span class="number">#${record.tranid}</span></td>
+	</tr>
+	<tr>
+	<td align="right"><span class="number">${record.trandate}</span></td>
+	</tr>
+	<tr></tr></table>
+        </macro>
+        <macro id="nlfooter">
+            <table class="footer" style="width: 100%;"><tr>
+	<td><barcode codetype="code128" showtext="true" value="${record.tranid}"/></td>
+	<td style="padding-left: 250px;"><pagenumber/> of <totalpages/></td>
+	</tr>
+	<tr>
+	<td>
+		<#assign totalpages="<totalpages/>">
+    	<#assign currentpageno="<pagenumber/>">
+	</td>
+		<td style="padding-left: 220px;font-size:8pt">
+		{{t:i;r:n;o:"Client";h:20;}}
+		</td>
+	</tr>
+	</table>
+        </macro>
+    </macrolist>
+    <style type="text/css">table {
+        <#if .locale == "zh_CN">
+            font-family: stsong, sans-serif;
+        <#elseif .locale == "zh_TW">
+            font-family: msung, sans-serif;
+        <#elseif .locale == "ja_JP">
+            font-family: heiseimin, sans-serif;
+        <#elseif .locale == "ko_KR">
+            font-family: hygothic, sans-serif;
+        <#elseif .locale == "ru_RU">
+            font-family: verdana;
+        <#else>
+            font-family: sans-serif;
+        </#if>
+            font-size: 9pt;
+            table-layout: fixed;
+        }
+        th {
+            font-weight: bold;
+            font-size: 8pt;
+            vertical-align: middle;
+            padding: 5px 6px 3px;
+            background-color: #e3e3e3;
+            color: #333333;
+        }
+        td {
+            padding: 0px 0px;
+        }
+        b {
+            font-weight: bold;
+            color: #333333;
+        }
+        table.header td {
+            padding: 0px;
+            font-size: 10pt;
+        }
+        table.footer td {
+            padding: 0px;
+            font-size: 8pt;
+        }
+        table.itemtable th {
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+        table.body td {
+            padding-top: 2px;
+        }
+        table.total {
+            page-break-inside: avoid;
+        }
+        tr.totalrow {
+            background-color: #e3e3e3;
+            line-height: 200%;
+        }
+        td.totalboxtop {
+            font-size: 12pt;
+            background-color: #e3e3e3;
+        }
+        td.addressheader {
+            font-size: 14pt;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+        td.address {
+            padding-top: 0px;
+        }
+        td.totalboxmid {
+            font-size: 28pt;
+            padding-top: 20px;
+            background-color: #e3e3e3;
+        }
+        td.totalboxbot {
+            background-color: #e3e3e3;
+            font-weight: bold;
+        }
+        td.termbox {
+			background-color: #F6FA12;
+            font-weight: bold;
+		}
+        span.title {
+            font-size: 16pt;
+        }
+        span.number {
+            font-size: 16pt;
+        }
+        span.itemname {
+            font-weight: bold;
+            line-height: 150%;
+        }
+        hr {
+            width: 100%;
+            color: #d3d3d3;
+            background-color: #d3d3d3;
+            height: 1px;
+        }
+		td.border {
+			border-style: solid,
+			
+		}
+</style>
+
+                    <script>var w=window;if(w.performance||w.mozPerformance||w.msPerformance||w.webkitPerformance){var d=document,AKSB=AKSB||{};AKSB.q=[],AKSB.mark=function(e,_){AKSB.q.push(["mark",e,_||(new Date).getTime()])},AKSB.measure=function(e,_,t){AKSB.q.push(["measure",e,_,t||(new Date).getTime()])},AKSB.done=function(e){AKSB.q.push(["done",e])},AKSB.mark("firstbyte",(new Date).getTime()),AKSB.prof={custid:"501074",ustr:"",originlat:"0",clientrtt:"27",ghostip:"23.201.103.198",ipv6:false,pct:"10",clientip:"108.190.36.249",requestid:"5c01375c",region:"20029",protocol:"h2",blver:12,akM:"x",akN:"ae",akTT:"O",akTX:"1",akTI:"5c01375c",ai:"329458",ra:"false",pmgn:"",pmgi:"",pmp:"",qc:""},function(e){var _=d.createElement("script");_.async="async",_.src=e;var t=d.getElementsByTagName("script"),t=t[t.length-1];t.parentNode.insertBefore(_,t)}(("https:"===d.location.protocol?"https:":"http:")+"//ds-aksb-a.akamaihd.net/aksb.min.js")}</script>
+                    </head>
+<body header="nlheader" header-height="10%" footer="nlfooter" footer-height="20pt" padding="0.5in 0.5in 0.5in 0.5in" size="Letter">
+
+    <table style="width: 100%; margin-top: 10px;"><tr><!--<td class="addressheader" colspan="3"><b>${record.billaddress@label}</b></td>--><!--<td class="addressheader" colspan="3"><b>${record.shipaddress@label}</b></td>-->
+	<th colspan="3" rowspan="1"><b>${record.billaddress@label}</b></th>
+	<th colspan="3" rowspan="1"><b>Please send payments to</b></th>
+	<!--<td class="totalboxmid" colspan="3" rowspan="2"><b>${record.total@label?upper_case}</b></td>--></tr>
+	<tr>
+	<td class="address" colspan="3" rowspan="3"><span style="font-size: 12px;">${record.billaddress}</span></td>
+	<!--<td class="address" colspan="3" rowspan="2"><span style="font-size: 8px;">${record.shipaddress}</span></td>-->
+	<td class="address" colspan="3" rowspan="3"><span style="font-size: 12px;">${companyInformation.mainaddress_text}</span></td>
+	<!--<td align="right" class="totalboxmid" colspan="3" rowspan="3"><span style="font-size: 12px;">${record.total}</span></td>--></tr>
+	<tr><!--<td align="right" class="totalboxbot" colspan="3"><b>${record.duedate@label}:</b> ${record.duedate}</td>--></tr></table>
+
+<table class="body" style="width: 100%; margin-top: 10px;"><tr>
+	<th>Job #</th>
+	<th>Custom Job#</th>
+	<th>${record.terms@label}</th>
+	<th>${record.duedate@label}</th>
+	<th>${record.otherrefnum@label}</th>
+	</tr>
+	<tr>
+	<td>${record.opportunity}</td>
+	<td>${record.opportunity.custbody12}</td>
+	<td>${record.terms}</td>
+	<td>${record.duedate}</td>
+	<td>${record.otherrefnum}</td>
+	</tr></table>
+<#if record.terms.discountpercent?has_content>
+
+<table class="body" style="width: 100%; margin-top: 10px;"><tr>
+	<th style="text-align:center">Subject To Terms Discount</th>
+	<th>&nbsp;</th>
+	<th>Discount</th>
+	<th>&nbsp;</th>
+	<th style="text-align:center">Amount If Paid By ${record.custbody_cpm_termdiscountexpiry}</th>
+	<th>&nbsp;</th>
+	<th style="text-align:center">Amount If Paid By ${record.duedate}</th>
+	</tr>
+	<tr>
+	<td>${record.subtotal}</td>
+	<td>&nbsp;</td>
+	<td>${record.custbody_cpm_termdiscount}</td>
+	<td>&nbsp;</td>
+	<td>${record.custbody_cpm_termdiscounttotal}</td>
+	<td>&nbsp;</td>
+	<td>${record.total}</td>
+	</tr></table>
+</#if>
+
+<table class="body" style="width: 100%; margin-top: 10px;"><tr>
+	<th>Printer</th>
+	<td colspan="4">${record.opportunity.custbodyvndrawarder}</td>
+	</tr>
+	<tr>
+	<th>Job Title</th>
+	<td colspan="4">${record.opportunity.custbody18}</td>
+	</tr>
+	<tr>
+	<th rowspan="4">Job Specs</th>
+	<td colspan="4" rowspan="4">${record.opportunity.memo}</td>
+	</tr></table>
+<#if record.recmachcustrecord_paper_invoice?has_content>
+
+<table class="itemtable" style="width: 100%; margin-top: 10px;"><#list record.recmachcustrecord_paper_invoice as paperList><#if paperList_index==0>
+<thead>
+	<tr>
+	<th align="center" colspan="3">Paper Type</th>
+	<th>Allowance</th>
+	<th>Actual</th>
+	<th>Over / Under Consumption</th>
+	</tr>
+</thead>
+</#if><tr>
+	<td align="center" colspan="3">${paperList.custrecord5}</td>
+	<td>${paperList.custrecord7}</td>
+	<td>${paperList.custrecord8}</td>
+	<td>${paperList.custrecord9}</td>
+	</tr>
+	</#list></table>
+</#if><#if record.item?has_content>
+
+<table class="itemtable" style="width: 100%; margin-top: 10px;"><!-- start items --><#list record.item as item><#if item_index==0>
+<thead>
+	<tr>
+	<th colspan="12">${item.item@label}</th>
+	<th align="center" colspan="3">${item.quantity@label}</th>
+	<th colspan="3">${item.units@label}</th>
+	<th align="right" colspan="4">${item.rate@label}</th>
+	<th align="right" colspan="4">${item.amount@label}</th>
+	</tr>
+</thead>
+</#if>
+  <#if item.rate != 0 && item.amount != 0>
+  <tr>
+	<td colspan="12"><span align="left">${item.custcol_cpm_itemdisplayname}</span></td>
+	<td align="right" colspan="3" line-height="100%">${item.quantity}</td>
+	<td colspan="3" style="padding-left:5px;">${item.units}</td>
+	<td align="right" colspan="4">${item.rate?string['0.000000']}</td>
+	<td align="right" colspan="4">${item.amount}</td>
+	</tr></#if>
+	</#list><!-- end items --></table>
+
+<hr /></#if>
+<table class="total" style="width: 100%; margin-top: 10px;"><tr>
+	<td colspan="4">&nbsp;</td>
+	<td align="right"><b>${record.subtotal@label}</b></td>
+	<td align="right">${record.subtotal}</td>
+	</tr>
+	<tr>
+	<td colspan="4">&nbsp;</td>
+	<td align="right"><b>${record.taxtotal@label} (${record.taxrate}%)</b></td>
+	<td align="right">${record.taxtotal}</td>
+	</tr>
+	<tr class="totalrow">
+	<td background-color="#ffffff" colspan="4">&nbsp;</td>
+	<td align="right"><b>${record.total@label}</b></td>
+	<td align="right">${record.total}</td>
+	</tr>
+	<#if record.terms.discountpercent?has_content>
+	<tr class="totalrow">
+	<td background-color="#ffffff" colspan="4">&nbsp;</td>
+	<td align="right" class="termbox"><b>${record.custbody_cpm_termdiscount@label}</b></td>
+	<td align="right" class="termbox">${record.custbody_cpm_termdiscount}</td>
+	</tr>
+	<tr class="totalrow">
+	<td background-color="#ffffff" colspan="4">&nbsp;</td>
+	<td align="right" class="termbox"><b>Pay By ${record.custbody_cpm_termdiscountexpiry}</b></td>
+	<td align="right" class="termbox">${record.custbody_cpm_termdiscounttotal}</td>
+	</tr>
+	</#if></table>
+    <pbr />
+  <table class="body" style="width: 100%; margin-top: 8px;">
+	<tr>
+		<th align="left" colspan="5">Standard Terms</th>
+	</tr>
+	</table>
+	<ol style="font-size: 8pt;">
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Proposal Limited to Specifications. This proposal is limited strictly to the specifications and these terms and conditions. No changes in the
+specifications, including these terms and conditions shall be binding upon Calev Print Media (hereafter referred to as �CPM�) or become a part of this
+proposal and no alterations or additions to this proposal may be made. If any amendments, modifications or additions are required and agreed upon
+by CPM and Customer, they will be included in a separate proposal, which will be substituted for this proposal.
+</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+Taxes and Additional Charges. All sales, use, retailer's occupation, service occupation, including transportation or other charges, service
+occupation or like tax imposed on account of this transaction will be added as an extra charge. Additional costs incurred by CPM as a result of
+Customer's failure to perform its obligations hereunder, including Customer delays and unsuitability of materials furnished by Customer for the work,
+increases in the cost of work occurring after the date hereof, due to unanticipated changes in the rates of employee compensation, increases of more
+than 5% in the cost of material or energy which have not previously been announced, or increases due to governmental action, shall all be for
+Customer's account. Quoted price is based on current cost to CPM of the type of and grade of paper specified. Any increases in the cost of such
+paper to CPM occurring thereafter and prior to the furnishing of such paper for the work, shall be for Customer's account. Customer shall be charged
+or credited with over-runs or under-runs, which shall not, however, exceed 3% of the quantity ordered. Spoilage subsequent to delivery and work
+rendered unusable due to shortages of materials furnished by Customer shall be for Customer's account.			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Deliveries. All deliveries shall be made F.O.B. Printer's dock or U.S. Post Office at Printer's locale, and risk of loss shall pass Customer upon
+delivery. Prices are met F.O.B. place of delivery. Any transportation charges (including insurance) incurred by CPM for Customer shall be invoiced
+and paid in addition to charges for the Work; in such case, CPM assumes no responsibility for the actions or failures of any reputable common carrier
+chosen by CPM or Printer.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Storage and Ownership of Property. Materials furnished by Customer shall remain Customer's property, and shall be stored by Printer without
+charge for thirty days after delivery, after which date, storage charges will accrue. All other materials used in producing the work whether or not
+charged to Customer shall be the property of CPM.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Security Interest and Collection. As security for payments of any sums due or to become due to CPM under the terms of this Agreement, CPM
+shall have the right to retain possession of and Customer hereby grants to CPM a security interest in all property of Customer in printer's possession.
+Customer shall be liable for CPM's cost of collection, including reasonable attorney's fees incurred to recover any payment due under this proposal.
+Amounts overdue accrue interest at 1-1/2% per month.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Delay. All schedules are subject to delays caused by or resulting from any failure of Customer to furnish or return materials in satisfactory
+condition for use by CPM, promptly, and as required by CPM's schedules, and CPM shall not be liable to Customer for any delay resulting from or
+occasioned by Customer's delay nor shall CPM be liable for any delay caused by or resulting from any act of God, shortage of labor, materials, energy
+or supplies, accident, labor difficulty, embargo, governmental regulations, or any delay or breach of contract by carriers, suppliers or other
+contractors with whom CPM has contracted for the furnishing of labor, materials, supplies, energy or transportation, or by reason of any other caused
+beyond the reasonable control of CPM, delay resulting from or occasioned by any such cause or event being hereby excused. The period of delay
+shall be 45 days or the period of time required to enable CPM to reschedule the work in accordance with its production schedules for this and other
+work not to exceed 45 days, and CPM shall not be liable to Customer for damages resulting from any delay so caused.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Defects. Printer's work shall be of commercially acceptable quality and shall conform to specifications set forth herein. This warranty is the only
+warranty made by CPM in connection with the work, and all other warranties, expressed or implied, are hereby specifically excluded. CPM's sole
+liability for breach of this warranty shall be limited to a credit, to be issued by CPM, for the mechanical cost of reproduction of the page or portion
+there of found defective, determined by dividing the cost of the book (cost of printing, postage, paper and transportation) by the total number of
+pages to determine the cost per page; and dividing the per page cost by the portion found to be defective. No claim for breach of warranty shall be
+allowed unless given to CPM in writing within fifteen days after shipment of the product, and any claim not made within such period of time, unless
+not reasonably discoverable upon inspection, shall be deemed absolutely waived. Customer agrees that no action for breach of this agreement by
+CPM may be instituted more than one year after date of delivery of the work.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			No Infringement. Customer represents and guarantees that none of the materials furnished by Customer to CPM for reproduction infringes any
+copyright, trademark, trade name or other proprietary rights, nor unlawfully reproduces any official or governmental matter nor any official, business
+or trade secret and that no such material is obscene, libelous or otherwise violating of any statute, regulation or private right. Customer agrees to
+indemnify, save, defend and hold CPM harmless from all loss, cost or damage of every kind or nature, including reasonable attorney's fees, which
+CPM may incur as the result of any such violation or claim thereof.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Postal. Customer agrees to indemnify and hold CPM harmless from and against all claims and liabilities arising out of the failure of any of
+Customer�s insert or mailing materials to conform to any rules or regulations of the U.S. Postal Service in connection with markings, labeling, inserts
+or any other matter connected with the Work, including without limitation, any loss of postal discounts charged to CPM by reason of such non-conformity
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Paper. If CPM shall order paper for the Work at Customer�s request, Customer assumes full responsibility for the repurchase and disposition
+(including any storage charges) of CPM�s unused inventory of such paper stock due to Customer�s change of specifications, cessation of Customer�s
+operation or termination of the Work prior to CPM�s completion thereof.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Venue and Liability. This proposal is deemed executed at CPM's business office in Miami, Florida, and shall be construed under the laws of
+the State of Florida. The parties agree that any action relating to this proposal shall be instituted in the appropriate state or federal courts, and each
+party waives the right to change of venue. Except as otherwise provided in this Agreement, neither party hereto shall be liable to the other for
+incidental, consequential, special or punitive damages, including without limitation, damages for loss of profits, revenues or business.
+			</span></td></tr></table>
+		</li>
+		<li>
+			<table class="body" style="width: 100%; font-size: 8pt;"><tr><td align="left"><span>
+			Entire Agreement. This proposal, including all attachments and Printing Agreement between CPM and customer, when accepted by CPM and
+Customer as provided for below, shall constitute the entire agreement of the parties relating to its subject matter.
+This proposal is subject to modification or cancellation by CPM at any time prior to its acceptance by CUSTOMER and CPM. If this proposal meets
+with your approval, please sign below. Following your approval and upon signature by an officer of Calev Print Media at Miami, FL the approved
+proposal will then constitute a contract between us.
+			</span></td></tr></table>
+		</li>
+	</ol>
+ <table class="body" style="width: 100%; margin-top: 10px;">
+  <tr>
+	<td align="left" colspan="2" valign="top" style="font-size: 8px;"><br /><br /><br /></td>
+	<td></td>
+	<td align="left" colspan="2" rowspan="2" valign="bottom" style="font-size: 8pt;">Submitted by:<br/>Calev Print Media, LLC.</td>
+  </tr>
+  <tr>
+    <td style="font-size: 7px;padding-bottom:16px">{{t:t;r:y;o:"Client";l:"Name";h:20;}}</td>
+  </tr>
+  <tr>
+	<td align="left" colspan="2" valign="top" style="font-size: 8pt; border-top: 1px solid #000000;">Customer Name and Title:<br /><br /><br /><br /></td>
+  </tr>
+  <tr>
+  	<td>{{t:s;r:y;o:"Client";h:20;}}</td>
+  </tr>
+  <tr>
+	<td align="left" colspan="2" valign="top" style="margin-top:15px;font-size: 8pt; border-top: 1px solid #000000;">Signature:<br /><br /><br /></td>
+	<td></td>
+	<td align="left" colspan="2" valign="top" style="margin-top:15px;font-size: 8pt; border-top: 1px solid #000000;">By:<br /><br /><br /></td>
+  </tr>
+  <tr>
+  	<td style="font-size: 8px;padding-bottom:15px">{{t:t;r:y;o:"Client";l:"Date";h:20;}}</td>
+  </tr>
+  <tr>
+	<td align="left" colspan="2" valign="top" style="font-size: 8pt; border-top: 1px solid #000000;">Date:</td>
+	<td></td>
+	<td align="left" colspan="2" valign="top" style="font-size: 8pt; border-top: 1px solid #000000;">Date:</td>
+  </tr>
+  </table>
+</body>
+</pdf>
