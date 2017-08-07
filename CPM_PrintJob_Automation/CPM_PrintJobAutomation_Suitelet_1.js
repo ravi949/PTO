@@ -34,14 +34,7 @@ function(record, search, runtime, redirect) {
 				operator: search.Operator.ANYOF,
 				values: pageCntId
 			}));
-			/*var searchEstimations = search.create({
-			type : 'customrecord_cpm_estimation',
-			filters : [
-			           ['custrecord_cpm_printjobformat', 'anyof', formatId], 'and',
-			           ['custrecord_cpm_formatpagecount', 'anyof', pageCntId]
-			           ],
-			columns : ['internalid', 'custrecord_cpm_estimation_ig']
-		    });*/
+			
 			var returnValue = [];
 			searchEstimations.run().each(function(estimate){
 				returnValue.push(estimate.getValue('internalid'));

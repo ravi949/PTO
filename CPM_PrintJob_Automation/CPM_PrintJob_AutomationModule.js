@@ -30,8 +30,6 @@ function(search, record, runtime) {
 			id: recId,
 			isDynamic: true
 		});
-		
-//		mfgBrcItemId = runtime.getCurrentScript().getParameter({name:'custscript_cpm_pja_s2_mfgbrc_id'});
 
 		log.debug('objArray',objArray)
 		
@@ -95,7 +93,6 @@ function(search, record, runtime) {
 					if(lineValue.itemUnit == perThousandId){  //equal to per 1000
 						 rate = estCost * (1 + parseFloat(lineValue.markup)/100); //taj added this line
 					     amount = (lineValue.quantity * rate)/1000;
-						 //rate = 1000 * (amount / lineValue.quantity);
 					} else {
 						//rate = amount / lineValue.quantity;
 					}
@@ -124,9 +121,6 @@ function(search, record, runtime) {
 					});
 					if (lineValue.itemUnit == perThousandId){  //equal to per 1000
 						amount = parseFloat(rate) * ((lineValue.quantity)/1000);
-						////log.debug('R/M PRICE rate', rate);
-						////log.debug('R/M PRICE qty', lineValue.quantity);
-						////log.debug('R/M PRICE amount', amount);
 					} else {
 						amount = parseFloat(rate) * lineValue.quantity;
 					}
@@ -194,67 +188,6 @@ function(search, record, runtime) {
 			priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_printer',search.Operator.ANYOF,vendorId]);
 		}
 
-//		var priceRecordSearch = search.load({
-//			type : 'customrecord_cpm_estimationprice',
-//			id : 'customsearch_cpm_pja_getpricerecord'
-//		});		
-		
-//		priceRecordSearch.filters.push(search.createFilter({
-//			name : 'custrecord_cpm_est_price_item',
-//			operator : search.Operator.ANYOF,
-//			values : itemId
-//		}));
-//		
-//		priceRecordSearch.filters.push('and',search.createFilter({
-//			name : 'custrecord_cpm_est_price_format',
-//			operator : search.Operator.ANYOF,
-//			values : estimateId
-//		}));
-//		
-//		//taj added the price for volume filter
-//		priceRecordSearch.filters.push('and',search.createFilter({
-//			name : 'custrecord_cpm_est_price_forvolume',
-//			operator : search.Operator.IS,
-//			values : priceForVolume
-//		}));
-//
-//		priceRecordSearch.filters.push('and',search.createFilter({
-//			name : 'custrecord_cpm_est_price_forcustomer',
-//			operator : search.Operator.IS,
-//			values : priceForCustomer
-//		}));
-//		//end
-		
-//		if(customerId != null){
-//			priceRecordSearch.filters.push('and',search.createFilter({
-//				name : 'custrecord_cpm_est_price_customer',
-//				operator : search.Operator.ANYOF,
-//				values : customerId
-//			}));
-//		}
-//		
-//		if(vendorId != null){
-//			priceRecordSearch.filters.push('and',search.createFilter({
-//				name : 'custrecord_cpm_est_price_printer',
-//				operator : search.Operator.ANYOF,
-//				values : vendorId
-//			}));
-//		}
-		
-//		if(isVolumePrice && quantity != null && quantity != '' && quantity != 0){
-//			priceRecordSearch.filters.push('and',search.createFilter({
-//				name : 'custrecord_cpm_est_price_qtyfloor',
-//				operator: search.Operator.LESSTHANOREQUALTO,
-//				values : quantity
-//			}));
-//			priceRecordSearch.filters.push('and',search.createFilter({
-//				name : 'custrecord_cpm_est_price_qtycap',
-//				operator: search.Operator.GREATERTHAN,
-//				values : quantity
-//			}));
-//		}
-		
-//		isVolumePrice && quantity != null && quantity != '' && quantity != 0
 		log.debug('quantity '+itemId,quantity)
 		
 		if(isVolumePrice){
@@ -310,7 +243,6 @@ function(search, record, runtime) {
 	 * @returns {Object}
 	 */
 	function getBRC(itemId, vendorId, quantity) {
-		//if (vendorId == 'brcVendor') vendorId = runtime.getCurrentScript().getParameter({name:'custscript_linevalues_brcven'});
 		var costRecordSearch = search.load({
 			type : 'customrecord_cpm_estimation_brc',
 			id : 'customsearch_cpm_pja_getbrccost'
@@ -368,7 +300,6 @@ function(search, record, runtime) {
 	function getCostRecord(estimateId, itemId, customerId, vendorId, quantity, isVolumeCost,costForVolume) {
 		
 		if (estimateId == null || estimateId == '' || itemId == null || itemId == '') return {cost: '0', unit: '-1', spoilage: '0'};
-		//if (vendorId == 'defaultVendor') vendorId = runtime.getCurrentScript().getParameter({name:'custscript_linevalues_defven'});
 		
 		var costRecordSearch = {filters:[['isinactive','is',false]]};
 		
@@ -414,59 +345,6 @@ function(search, record, runtime) {
 			columns:[sortedColumn,'custrecord_cpm_est_cost_itemcost','custrecord_cpm_est_cost_unit','custrecord_cpm_est_cost_spoilagefactor'],
 			filters:costRecordSearch.filters
 		});
-		
-//		var costRecordSearch = search.load({
-//			type : 'customrecord_cpm_estimationcost',
-//			id : 'customsearch_cpm_pja_getcostrecord'
-//		});
-//		
-//		costRecordSearch.filters.push(search.createFilter({
-//			name : 'custrecord_cpm_est_cost_item',
-//			operator : search.Operator.ANYOF,
-//			values : itemId
-//		}));
-//		
-//		costRecordSearch.filters.push(search.createFilter({
-//			name : 'custrecord_cpm_est_cost_format',
-//			operator : search.Operator.ANYOF,
-//			values : estimateId
-//		}));
-//		
-//		//taj added this filter for custrecord_cpm_est_cost_forvolume
-//		costRecordSearch.filters.push(search.createFilter({
-//			name : 'custrecord_cpm_est_cost_forvolume',
-//			operator : search.Operator.IS,
-//			values : costForVolume
-//		}));
-//		
-//		if(customerId != null){
-//			costRecordSearch.filters.push(search.createFilter({
-//				name : 'custrecord_cpm_est_cost_customer',
-//				operator : search.Operator.ANYOF,
-//				values : customerId
-//			}));
-//		}
-//		
-//		if(vendorId != null){
-//			costRecordSearch.filters.push(search.createFilter({
-//				name : 'custrecord_cpm_est_cost_vendor',
-//				operator : search.Operator.ANYOF,
-//				values : vendorId
-//			}));
-//		}
-//		
-//		if(isVolumeCost && quantity != null && quantity != '' && quantity != 0){
-//			costRecordSearch.filters.push(search.createFilter({
-//				name : 'custrecord_cpm_est_cost_qtyfloor',
-//				operator: search.Operator.LESSTHANOREQUALTO,
-//				values : quantity
-//			}));
-//			costRecordSearch.filters.push(search.createFilter({
-//				name : 'custrecord_cpm_est_cost_qtycap',
-//				operator: search.Operator.GREATERTHAN,
-//				values : quantity
-//			}));
-//		}
 		var costRecord = null;
 		costSearch.run().each(function(result){
 			costRecord = {};

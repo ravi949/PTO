@@ -124,19 +124,7 @@ define(['N/record',
 								costRecord = {cost: '0', unit: '-1', spoilage: '0',found:false};
 							}
 							//end
-
-							/*if (costRecord == null && customerId != null){
-		    					customerId = null;
-		    					costRecord = cpm.getCostRecord(estimateId, itemId, customerId, vendorId, quantity, hasVolumeCost,false); //false for forvolume
-		    			    }		    			
-		    				if (costRecord == null && vendorId != 'defaultVendor'){
-		    					vendorId = 'defaultVendor';
-		    					costRecord = cpm.getCostRecord(estimateId, itemId, customerId, vendorId, quantity, hasVolumeCost,false); //false for forvolume
-		    				}
-		    				if (costRecord == null && vendorId == 'defaultVendor' && customerId == null) {
-								costRecord = {cost: '0', unit: '-1', spoilage: '0',found:false};
-		    				}*/
-
+							
 							//get Price
 							var hasCustomerPrice,isVolumePrice; //taj added
 							hasCustomerPrice = (hasCustomerPrice == 'T')?true:false; //taj added
@@ -152,7 +140,6 @@ define(['N/record',
 								quantity = parseFloat(quantity)*(1 + parseFloat(costRecord.spoilage)/100);
 							/*end*/
 
-							//priceRecord = cpm.getPriceRecord(estimateId, itemId, customerId, vendorId, quantity, isVolumePrice);  
 							log.debug('isVolumePrice '+itemId,isVolumePrice)
 							//taj added these two scenarios B & D
 							if(isVolumePrice && hasCustomerPrice){  //scenario B
@@ -184,24 +171,7 @@ define(['N/record',
 							if (priceRecord == null) {
 								priceRecord = {price: '0', unit: '-1', markup: '0'};
 							}
-							//taj added lines ended
-								//price scenarios
-								/*if(priceRecord == null && customerId != null){   //scenario c
-		    					customerId = null;
-		    					priceRecord = cpm.getPriceRecord(estimateId, itemId, customerId, vendorId, quantity, isVolumePrice,false); //price_forvolume is false						
-		    				}
-
-							if(priceRecord == null  && isVolumePrice == 'T'){
-								priceRecord = 	cpm.getItemPriceLevel(itemId,itemUnit,eachId,perJobId,perThousandId);
-							}
-
-		    				if (priceRecord == null && isVolumePrice){
-		    					isVolumePrice = false;
-		    					priceRecord = cpm.getPriceRecord(estimateId, itemId, customerId, vendorId, quantity, isVolumePrice);
-		    				}
-		    				if (priceRecord == null && customerId == null && !isVolumePrice) {
-		    					priceRecord = {price: '0', unit: '-1', markup: '0'};
-		    				}*/
+							
 							lineValues.push({
 								lineNo: printJob.getCurrentSublistIndex({sublistId:'item'}),
 								item: itemId,

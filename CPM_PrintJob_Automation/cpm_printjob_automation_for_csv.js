@@ -11,9 +11,9 @@ require.config({
   }
 });
 
-define(['N/record','N/search','N/runtime','N/task','printJobModule'],
+define(['N/record','N/search','N/runtime','printJobModule'],
 
-function(record,search,runtime,task,printJobModule) {
+function(record,search,runtime,printJobModule) {
    
     /**
      * Definition of the Scheduled script trigger point.
