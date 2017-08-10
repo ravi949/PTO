@@ -27,9 +27,9 @@ function(record, redirect) {
     			var oldRec = record.load({
      			    type: record.Type.SALES_ORDER, 
      			    id: recordId
-     			}),                    
-                recordFormTypeId= oldRec.getValue({fieldId:'customform'}),
-     			newRec = record.copy({
+     			});                    
+                var recordFormTypeId= oldRec.getValue({fieldId:'customform'});
+     			var newRec = record.copy({
      			    type: record.Type.SALES_ORDER, 
      			    id: recordId
      			});

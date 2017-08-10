@@ -3,7 +3,7 @@
  * @NScriptType UserEventScript
  * @NModuleScope SameAccount
  */
-define(['N/record', 'N/redirect', 'N/ui/serverWidget', 'N/search', 'N/task'],
+define([],
 /**
  * @param {record} record
  * @param {redirect} redirect
@@ -11,7 +11,7 @@ define(['N/record', 'N/redirect', 'N/ui/serverWidget', 'N/search', 'N/task'],
  * @param {search} search
  * @param {task} task
  */
-function(record, redirect, runtime, serverWidget, task) {
+function() {
    
     /**
      * Function definition to be triggered before record is loaded.
@@ -46,37 +46,8 @@ function(record, redirect, runtime, serverWidget, task) {
     	}
 
     }
-
-    /**
-     * Function definition to be triggered before record is loaded.
-     *
-     * @param {Object} scriptContext
-     * @param {Record} scriptContext.newRecord - New record
-     * @param {Record} scriptContext.oldRecord - Old record
-     * @param {string} scriptContext.type - Trigger type
-     * @Since 2015.2
-     */
-    function beforeSubmit(scriptContext) {
-
-    }
-
-    /**
-     * Function definition to be triggered before record is loaded.
-     *
-     * @param {Object} scriptContext
-     * @param {Record} scriptContext.newRecord - New record
-     * @param {Record} scriptContext.oldRecord - Old record
-     * @param {string} scriptContext.type - Trigger type
-     * @Since 2015.2
-     */
-    function afterSubmit(scriptContext) {
-
-    }
-
     return {
-        beforeLoad: beforeLoad,
-//        beforeSubmit: beforeSubmit,
-//        afterSubmit: afterSubmit
+        beforeLoad: beforeLoad
     };
     
 });

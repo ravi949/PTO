@@ -3,11 +3,11 @@
  * @NScriptType ClientScript
  * @NModuleScope SameAccount
  */
-define(['N/record','N/url'],
+define(['N/url'],
 /**
- * @param {record} record
+ * @param {url} url
  */
-function(record,url) {
+function(url) {
     
     /**
      * Function to be executed after page is initialized.
