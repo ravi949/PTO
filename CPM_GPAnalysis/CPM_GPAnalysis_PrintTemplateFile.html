@@ -1,0 +1,224 @@
+<?xml version="1.0"?><!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
+<pdf>
+<head>
+    <macrolist>
+        <macro id="nlheader">
+        <table class="header" style="width: 100%;">
+			<tr>
+				<td rowspan="3" colspan="4"><#if companyInformation.logoUrl?length != 0><img src="${companyInformation.logoUrl}" style="float: left; margin: 7px; height:50%" /> </#if></td>
+				<td align="left" colspan="8"><span class="title" align="left">GP Analysis Report</span></td>
+			</tr>
+			<tr>
+				<td align="right"></td>
+			</tr>
+			<tr>
+				<td align="right"></td>
+			</tr>
+		</table>
+        </macro>
+        <!-- <macro id="nlfooter">
+        <table class="footer" style="width: 100%;">
+			<tr>
+				<td align="right"><pagenumber/> of <totalpages/></td>
+			</tr>
+		</table>
+        </macro> -->
+    </macrolist>
+    <style type="text/css">
+		font-family: "Times New Roman", Georgia, Serif;
+		table {
+            font-size: 9pt;
+            table-layout: fixed;
+        }
+        th {
+            font-weight: bold;
+            font-size: 10pt;
+            vertical-align: middle;
+            padding: 5px 6px 3px;
+            background-color: #e3e3e3;
+            color: #333333;
+        }
+        td {
+            padding: 4px 6px;
+        }
+        b {
+            font-weight: bold;
+            color: #333333;
+        }
+        table.header td {
+            padding: 0px;
+            font-size: 10pt;
+        }
+        table.footer td {
+            padding: 0px;
+            font-size: 8pt;
+        }
+        table.body td {
+            padding-top: 2px;
+        }
+        table.total {
+            page-break-inside: avoid;
+        }
+        tr.totalrow {
+            background-color: #e3e3e3;
+            line-height: 200%;
+        }
+        td.addressheader {
+            font-size: 8pt;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+        td.address {
+            padding-top: 0px;
+        }
+        td.totalboxmid {
+            font-size: 28pt;
+            padding-top: 20px;
+            background-color: #e3e3e3;
+        }
+        td.totalboxbot {
+            background-color: #e3e3e3;
+            font-weight: bold;
+        }
+        span.title {
+            font-size: 28pt;
+        }
+        span.number {
+            font-size: 16pt;
+        }
+        span.itemname {
+            font-weight: bold;
+            line-height: 150%;
+        }
+        hr {
+            width: 100%;
+            color: #d3d3d3;
+            background-color: #d3d3d3;
+            height: 1px;
+        }
+</style>
+</head>
+<body header="nlheader" header-height="10%" footer="nlfooter" footer-height="20pt" padding="0.5in 0.5in 0.5in 0.5in" size="Landscape">
+    <table style="width: 100%; margin-top: 10px;">
+		<tr>
+			<th colspan="2">${record.tranid@label}</th>
+			<th colspan="2">${record.entity@label}</th>
+			<th colspan="2">${record.custbody12@label}</th>
+			<th colspan="6">${record.custbody18@label}</th>
+		</tr>
+		<tr>
+			<td colspan="2">${record.tranid}</td>
+			<td colspan="2">${record.entity?upper_case}</td>
+			<td colspan="2">${record.custbody12}</td>
+			<td colspan="6">${record.custbody18}</td>
+		</tr>
+	</table>
+	<hr />
+	<!-- BEGIN TRANSACTIONS VIA SCRIPT HERE -->
+	<!-- Income / sales table -->
+	<table class="body" style="width: 100%; margin-top: 10px;">
+		<tr>
+			<th colspan="2">Account</th>
+			<th colspan="1">Type</th>
+			<th colspan="1">Doc. No.</th>
+			<th colspan="1">Date</th>
+			<th colspan="2">Name</th>
+			<th colspan="4">Memo</th>
+			<th colspan="1">Amount</th>
+		</tr>
+		<tr><td colspan="12"></td></tr>
+		<tr>
+			<td colspan="12" align="left"><b><u><i>Sales</i></u></b></td>
+		</tr>
+	<#list custtrans as income>
+	<#if income.custrecord_cpm_gpa_ssh_rectype=='income'>
+		<tr>
+			<td colspan="2">${income.custrecord_cpm_gpa_ssh_account}</td>
+			<td colspan="1">${income.custrecord_cpm_gpa_ssh_type}</td>
+			<td colspan="1">${income.custrecord_cpm_gpa_ssh_docnum}</td>
+			<td colspan="1">${income.custrecord_cpm_gpa_ssh_date}</td>
+			<td colspan="2">${income.custrecord_cpm_gpa_ssh_mainname}</td>
+			<td colspan="4">${income.custrecord_cpm_gpa_ssh_memo}</td>
+			<td colspan="1" align="right">${income.custrecord_cpm_gpa_ssh_amount}</td>
+		</tr>
+	</#if>
+	</#list>
+		<tr>
+			<th align="right" colspan="10"><b>Sales Subtotal</b> :</th>
+			<th colspan="2" align="right">${record.custbody_cpm_pjp_incometotal}</th>
+		</tr>
+		<tr><td colspan="12"></td></tr>
+		<tr>
+			<td colspan="12" align="left"><b><u><i>COGS</i></u></b></td>
+		</tr>
+	<#list custtrans as income>
+	<#if income.custrecord_cpm_gpa_ssh_rectype=='cogs'>
+		<tr>
+			<td colspan="2">${income.custrecord_cpm_gpa_ssh_account}</td>
+			<td colspan="1">${income.custrecord_cpm_gpa_ssh_type}</td>
+			<td colspan="1">${income.custrecord_cpm_gpa_ssh_docnum}</td>
+			<td colspan="1">${income.custrecord_cpm_gpa_ssh_date}</td>
+			<td colspan="2">${income.custrecord_cpm_gpa_ssh_mainname}</td>
+			<td colspan="4">${income.custrecord_cpm_gpa_ssh_memo}</td>
+			<td colspan="1" align="right">${income.custrecord_cpm_gpa_ssh_amount}</td>
+		</tr>
+	</#if>
+	</#list>
+		<tr>
+			<th align="right" colspan="10"><b>COGS Subtotal</b> :</th>
+			<th colspan="2" align="right">${record.custbody_cpm_pjp_cogstotal}</th>
+		</tr>
+	</table>
+	<hr />
+	<!-- GROSS PROFIT TABLE -->
+	<table class="body" style="width: 100%; margin-top: 10px;">
+		<tr>
+			<td colspan="4">
+			<td colspan="2">
+			<td colspan="2">
+			<td align="right" colspan="2"><b>${record.custbody_cpm_pjp_grossprofit@label}</b></td>
+			<td align="right" colspan="2"><b>${record.custbody_cpm_pjp_grossprofit}</b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<td colspan="2">
+			<td colspan="2">
+			<td align="right" colspan="2"><b>${record.custbody_cpm_pjp_grossmargin@label}</b></td>
+			<td align="right" colspan="2"><b>${record.custbody_cpm_pjp_grossmargin}</b></td>
+		</tr>
+	</table>
+	<!-- END TRANSACTIONS VIA SCRIPT HERE -->
+	
+	<p><b>GP Analysis Summary</b></p>
+	<table class="body" style="width: 50%; margin-top: 10px;"><tr>
+		<th colspan="4">Analysis / Type</th>
+		<th colspan="2">Sales</th>
+		<th colspan="2">COGS</th>
+		<th colspan="2">Profit</th>
+		<th colspan="2">Margin</th>
+		</tr>
+		<tr>
+		<td colspan="4">Gross</td>
+		<td colspan="2">${record.custbody_cpm_pjp_incometotal}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_cogstotal}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_grossprofit}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_grossmargin}</td>
+		</tr>
+		<tr>
+		<td colspan="4">Production (Mfg)</td>
+		<td colspan="2">${record.custbody_cpm_pjp_incomemfg}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_mfgcogs}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_mfgprofit}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_mfgprofitmargin}</td>
+		</tr>
+		<tr>
+		<td colspan="4">Distribution(Distro)</td>
+		<td colspan="2">${record.custbody_cpm_pjp_distroincome}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_distrocogs}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_distroprofit}</td>
+		<td colspan="2">${record.custbody_cpm_pjp_distroprofitmargin}</td>
+		</tr>
+	</table>
+	<hr />
+</body>
+</pdf>

@@ -7,10 +7,11 @@
 define(['N/runtime',
 		'N/record',
 		'N/render',
-		'N/search'
+		'N/search',
+		'N/file'
 	],
 
-function(runtime, record, render, search) {
+function(runtime, record, render, search, file) {
 	/**
      * Definition of the Suitelet script trigger point.
      *
@@ -22,11 +23,10 @@ function(runtime, record, render, search) {
     function onRequestPrintGPAnalysis(context) {
     		try{
     			//Script Parameters
-    			var templateFileId = runtime.getCurrentScript('SCRIPT', 'custscript_gpa_templatefileid');
-    			var incomeSearchId = runtime.getCurrentScript('SCRIPT', 'custscript_cpm_gpa_incomesearch');
-    			var cogsSearchId = runtime.getCurrentScript('SCRIPT', 'custscript_cpm_gpa_cogssearch');
+    			var templateFileId = runtime.getCurrentScript('SCRIPT', 'custscript_gpa_template_fileid');
+    			var incomeSearchId = runtime.getCurrentScript('SCRIPT', 'custscript_cpm_gpa_income_search');
+    			var cogsSearchId = runtime.getCurrentScript('SCRIPT', 'custscript_cpm_gpa_cogs_search');
     			
-    			var currentUserId = runtime.getCurrentUser().id;
     			var jobId = context.request.parameters('jobid');
     			
     			var jobRec = record.load({
@@ -51,12 +51,7 @@ function(runtime, record, render, search) {
     			});
     			
     			//Need to create the logic to combine 2 searches
-    			var holderRecords = searchHolderRecords(currentUserId, jobId);
     			
-    			renderer.addSearchResults({
-    				templateName : 'custtrans', 
-				    searchResult : holderRecords
-    			});
     				    
     			
     			xmlOutput = renderer.renderAsString();
