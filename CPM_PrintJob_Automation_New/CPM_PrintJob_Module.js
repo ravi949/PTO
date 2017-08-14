@@ -435,7 +435,7 @@ function(search, record) {
      	     ['custrecord_cpm_est_price_qtycap','equalto',0]]]);
 		}
 		
-		//get search results in asynchronous manner.
+		//get search results in ascending order.
 		var sortedColumn = search.createColumn({
 	    	    name: 'internalid',
 	    	    sort: search.Sort.ASC
@@ -564,7 +564,7 @@ function(search, record) {
     	    ]);
 		}
 
-		//get search results in asynchronous manner.
+		//get search results in ascending order.
 		var sortedColumn = search.createColumn({
 	    	    name: 'internalid',
 	    	    sort: search.Sort.ASC
