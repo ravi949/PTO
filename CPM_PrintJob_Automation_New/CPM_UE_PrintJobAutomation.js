@@ -36,7 +36,7 @@ function(runtime, redirect, serverWidget) {
 			   printJob.setValue({
 				   fieldId:'custbodypaperallowance',
 				   value:'0'
-			   })
+			   });
 
 			   var lineCount = printJob.getLineCount('item');
 			   for(var i=lineCount-1;i>=0;i--){
@@ -44,7 +44,7 @@ function(runtime, redirect, serverWidget) {
 					   sublistId:'item',
 					   line:i,
 					   ignoreRecalc: true
-				   })
+				   });
 			   }
 		   }  
 		   
