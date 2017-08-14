@@ -40,12 +40,10 @@ function(record, runtime, redirect, search, cpm) {
 			var estimateId = cpm.getEstimateId(printJob.getValue({fieldId : 'custbody_cpm_printjob_format'}), printJob.getValue({fieldId : 'custbody_cpm_printjob_pagecount'})),
 			estQty = printJob.getValue({fieldId : 'custbodyestqty'}),
 			brcQty = printJob.getValue({fieldId : 'custbody_cpm_printjob_brcquantity'}),
-			customer = printJob.getValue({fieldId : 'entity'}),
-			vendor = printJob.getValue({fieldId : 'custbodyvndrawarder'});
+			customerId = printJob.getValue({fieldId : 'entity'}),
+			vendorId = printJob.getValue({fieldId : 'custbodyvndrawarder'});
 
-			var defaultBrcVendor = 'brcvendor';
-
-			//Mfg : BRC Item and Units ID's
+			//Script parameters values for calculation
 			var scriptObj = runtime.getCurrentScript(),
 			defaultVendor = scriptObj.getParameter({name:'custscript_cpm_pj_autodefaultvendor'}),
 			brcVendor = scriptObj.getParameter({name:'custscript_cpm_pj_autobrcdefaultvendor'}),
@@ -54,8 +52,8 @@ function(record, runtime, redirect, search, cpm) {
 			perJobId = scriptObj.getParameter({name:'custscript_cpm_pj_autoperjob1'}),
 			perThousandId = scriptObj.getParameter({name:'custscript_cpm_pj_autoper1000_1'}),
 			brcInsertCatId = scriptObj.getParameter({name:'custscript_cpm_pj_autobrcinsert1'});
-			log.debug('brcInsertCatId',brcInsertCatId)
-
+		
+			//calculating the line amount,rate and cost values.
 			var itemLineCount = printJob.getLineCount({sublistId : 'item'});
 			if (itemLineCount > 0){
 				var lineValues = [], flag = false;
@@ -82,16 +80,15 @@ function(record, runtime, redirect, search, cpm) {
 						filters:[['internalid','is',itemId]]
 					}).run().getRange(0,1)[0].getValue('purchaseunit');
 
-					var customerId = customer;
 					if (include){//line is included
-						if (itemId != mfgBrcItemId){ //mfg Brc Item
+						if (itemId != mfgBrcItemId){ //if item is not Mfg:BRC Item
 
 							//get cost
 							hasVolumeCost = (hasVolumeCost == 'T')?true:false;
 							hasVendorCost = (hasVendorCost == 'T')?true:false;
-							var vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
+							vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
 
-							//gettting the cost record and customer condition
+							//getting the cost record and customer condition
 							function getCostRecordList(vendorId,hasVolumeCost,forVolume){
 								costRecord = cpm.getCostRecord(estimateId, itemId, customerId,vendorId, quantity, hasVolumeCost,forVolume);  //true for forvolume
 								if(costRecord == null)
@@ -99,10 +96,9 @@ function(record, runtime, redirect, search, cpm) {
 								return costRecord;
 							}
 
-							//cost scenarios
-							//Tajuddin Added the scenario G and H					
+							//Cost calculations scenario's					
 							if(hasVolumeCost && hasVendorCost ){ //scenario G		
-								vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
+								vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
 								costRecord = getCostRecordList(vendorId,hasVolumeCost,true); //true for forvolume
 							}
 
@@ -125,23 +121,16 @@ function(record, runtime, redirect, search, cpm) {
 							}
 							//end
 							
-							//get Price
-							var hasCustomerPrice,isVolumePrice; //taj added
-							hasCustomerPrice = (hasCustomerPrice == 'T')?true:false; //taj added
-							isVolumePrice = (hasVolumePricing == 'T')?true:false; //taj added
+							//Price calculation scenario's
+							var hasCustomerPrice = (hasCustomerPrice == 'T')?true:false; //taj added
+							var isVolumePrice = (hasVolumePricing == 'T')?true:false; //taj added
 
-							customerId = (hasCustomerPrice)? customer : null;
-							//var isVolumePrice = hasVolumePricing;
-							vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
-							//quantity = parseFloat(quantity)*(1 + parseFloat(costRecord.spoilage)/100);
-
-							/*these line added by taj*/
-							if(costRecord.spoilage>0 && itemPurchaseUnit != perJobId) //equal to perjob
+							customerId = (hasCustomerPrice)? customerId : null;
+							vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
+						
+							if(costRecord.spoilage > 0 && itemPurchaseUnit != perJobId) //equal to perjob
 								quantity = parseFloat(quantity)*(1 + parseFloat(costRecord.spoilage)/100);
-							/*end*/
-
-							log.debug('isVolumePrice '+itemId,isVolumePrice)
-							//taj added these two scenarios B & D
+							
 							if(isVolumePrice && hasCustomerPrice){  //scenario B
 								log.debug('scenario B',itemId);
 								priceRecord = cpm.getPriceRecord(estimateId, itemId, customerId, vendorId, quantity, isVolumePrice,true,true); // custrecord_cpm_est_price_forvolume is true and forcustomer true			
@@ -178,9 +167,7 @@ function(record, runtime, redirect, search, cpm) {
 								quantity: quantity,
 								cost: costRecord.cost,
 								spoilage: costRecord.spoilage,
-								costUnit: costRecord.unit,
 								price: priceRecord.price,
-								priceUnit: priceRecord.unit,
 								markup: priceRecord.markup,
 								itemUnit: itemUnit,
 								itemPurchaseUnit:itemPurchaseUnit,
@@ -198,9 +185,7 @@ function(record, runtime, redirect, search, cpm) {
 								quantity: quantity,
 								cost: brcRecord.cost,
 								spoilage: '0',
-								costUnit: brcRecord.unit,
 								price: '0',
-								priceUnit: '0',
 								markup: brcRecord.markup,
 								itemUnit: itemUnit,
 								itemPurchaseUnit:itemPurchaseUnit,
@@ -215,9 +200,7 @@ function(record, runtime, redirect, search, cpm) {
 							quantity: quantity,
 							cost: '0',
 							spoilage: '0',
-							costUnit: null,
 							price: '0',
-							priceUnit: null,
 							markup: '0',
 							itemUnit: printJob.getCurrentSublistValue({sublistId : 'item', fieldId : 'unit'}),
 							itemPurchaseUnit:itemPurchaseUnit,

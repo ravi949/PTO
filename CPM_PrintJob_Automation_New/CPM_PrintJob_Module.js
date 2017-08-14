@@ -294,9 +294,6 @@ function(search, record) {
 				var estCost = 0;
 				if (lineValue.itemPurchaseUnit == perThousandId){  //equal to per 1000
 					estCost = lineValue.quantity * ((parseFloat(lineValue.cost))/1000);
-					////log.debug('R/M COST cost', lineValue.cost);
-					////log.debug('R/M COST qty', lineValue.quantity);
-					////log.debug('R/M COST estCost', estCost);
 				} else {
 					estCost = lineValue.quantity * parseFloat(lineValue.cost);
 				}
@@ -318,7 +315,6 @@ function(search, record) {
 				
 				if (lineValue.markup != null && lineValue.markup != '0' && lineValue.costfound){
 					var rate = 0, amount = 0;
-					//amount = estCost * (1 + parseFloat(lineValue.markup)/100);    //need confirmation from giriesh
 					
 					estCost = (lineValue.item == mfgBrcItemId)?lineValue.cost:estCost; // taj added the new line for brc item condition
 					
@@ -328,15 +324,12 @@ function(search, record) {
 					
 					//taj added this condition
 					if(lineValue.itemUnit == eachId || lineValue.itemUnit == perJobId){   //equal to each
-					    rate = estCost * (1 + parseFloat(lineValue.markup)/100); //this giriesh added line 
-						//rate = (lineValue.cost) * (1 + parseFloat(lineValue.markup)/100); //changed by taj
+					    rate = estCost * (1 + parseFloat(lineValue.markup)/100);
 					}
 
 					if(lineValue.itemUnit == perThousandId){  //equal to per 1000
-						 rate = estCost * (1 + parseFloat(lineValue.markup)/100); //taj added this line
+						 rate = estCost * (1 + parseFloat(lineValue.markup)/100);
 					     amount = (lineValue.quantity * rate)/1000;
-					} else {
-						//rate = amount / lineValue.quantity;
 					}
 										
 					printJob.setCurrentSublistValue({
@@ -361,6 +354,7 @@ function(search, record) {
 						fieldId: 'rate',
 						value: rate
 					});
+					
 					if (lineValue.itemUnit == perThousandId){  //equal to per 1000
 						amount = parseFloat(rate) * ((lineValue.quantity)/1000);
 					} else {
@@ -383,7 +377,6 @@ function(search, record) {
 				});
 			} catch(ex) {
 				log.error('Commit Line', ex.name + ' ;; ' + ex.message);
-				//log.debug('Commit Line Values', JSON.parse(lineValue));
 			}
 		});
 		
@@ -413,25 +406,25 @@ function(search, record) {
 		
 		priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_format',search.Operator.ANYOF,estimateId]);
 		
-		//taj added the price for volume filter
+		//forvolume filters
 		priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_forvolume',search.Operator.IS,priceForVolume]);
 
 		priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_forcustomer',search.Operator.IS,priceForCustomer]);
 		//end
 		
-		
+		//customer filters added based on customer id null or have value
 		if(customerId != null){
 			priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_customer',search.Operator.ANYOF,customerId]);
 		}else{
 			priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_customer',search.Operator.IS,'@NONE@']);
 		}
 		
+		//vendor filters added based on vendor has value
 		if(vendorId != null){
 			priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_printer',search.Operator.ANYOF,vendorId]);
 		}
 
-		log.debug('quantity '+itemId,quantity)
-		
+	    //added the quantity filters based on isVolumePrice true or false
 		if(isVolumePrice){
 			priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_qtyfloor',search.Operator.LESSTHANOREQUALTO,quantity]);
 			priceRecordSearch.filters.push('and',['custrecord_cpm_est_price_qtycap',search.Operator.GREATERTHANOREQUALTO,quantity]);
@@ -439,24 +432,21 @@ function(search, record) {
 			priceRecordSearch.filters.push('and',[[['custrecord_cpm_est_price_qtyfloor','isempty',null],'and',
      	     ['custrecord_cpm_est_price_qtycap','isempty',null]],'or',
      	    [['custrecord_cpm_est_price_qtyfloor','equalto',0],'and',
-     	     ['custrecord_cpm_est_price_qtycap','equalto',0]]])
+     	     ['custrecord_cpm_est_price_qtycap','equalto',0]]]);
 		}
 		
-//		log.debug('cost item '+itemId, priceRecordSearch.filters)
-		
-		//new line:- if multiple result take the smallest internalid
+		//get search results in asynchronous manner.
 		var sortedColumn = search.createColumn({
 	    	    name: 'internalid',
 	    	    sort: search.Sort.ASC
 	    });
 		
+		//search for the cpm estimation price records.
 		var priceSearch = search.create({
 			type:'customrecord_cpm_estimationprice',
 			columns:[sortedColumn,'custrecord_cpm_est_price_itemprice','custrecord_cpm_est_price_unit','custrecord_cpm_est_cost_markup'],
 			filters:priceRecordSearch.filters
 		});
-		
-		log.debug('priceRecord'+itemId,priceSearch.run().getRange(0,10));
 		
 		var priceRecord = null;
 		priceSearch.run().each(function(result){
@@ -561,10 +551,8 @@ function(search, record) {
 		if(vendorId != null){
 			costRecordSearch.filters.push('and',['custrecord_cpm_est_cost_vendor',search.Operator.ANYOF,vendorId]);
 		}
-		
-//		isVolumeCost && quantity != null && quantity != '' && quantity != 0
-		log.debug('quantity '+itemId,quantity)
-		
+	
+		//adding the cost filter if isVolumeCost true or false
 		if(isVolumeCost){
 			costRecordSearch.filters.push('and',['custrecord_cpm_est_cost_qtyfloor',search.Operator.LESSTHANOREQUALTO,quantity]);
 			costRecordSearch.filters.push('and',['custrecord_cpm_est_cost_qtycap',search.Operator.GREATERTHANOREQUALTO,quantity]);
@@ -573,15 +561,16 @@ function(search, record) {
     	  	 ['custrecord_cpm_est_cost_qtycap','isempty',null]],'or',[
     	     ['custrecord_cpm_est_cost_qtyfloor','equalto',0],'and',
     	     ['custrecord_cpm_est_cost_qtycap','equalto',0]]
-    	    ])
+    	    ]);
 		}
-//		log.debug('cost iVolumeCost '+isVolumeCost+' item '+itemId, costRecordSearch.filters)
-		//new line:- if multiple result take the smallest internalid
+
+		//get search results in asynchronous manner.
 		var sortedColumn = search.createColumn({
 	    	    name: 'internalid',
 	    	    sort: search.Sort.ASC
 	    });
 		
+		//search for the cpm estimation cost records.
 		var costSearch = search.create({
 			type:'customrecord_cpm_estimationcost',
 			columns:[sortedColumn,'custrecord_cpm_est_cost_itemcost','custrecord_cpm_est_cost_unit','custrecord_cpm_est_cost_spoilagefactor'],

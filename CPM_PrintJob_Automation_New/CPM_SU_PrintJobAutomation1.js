@@ -42,18 +42,18 @@ function(record, search, runtime, redirect,cpm) {
     		var equipmentId = pj.getValue({fieldId : 'custbody_cpm_printjob_equipment'});
     		var versions = pj.getValue({fieldId : 'custbody_cpm_printjob_versions'});
     		var printQty = pj.getValue({fieldId : 'custbodyestqty'});
-    		log.debug('page count',pageCount)
-    		log.debug('format id',formatId)
+    		log.debug('page count',pageCount);
+    		log.debug('format id',formatId);
     		//BRC/Insert item category and Units id
     		var itemCatId = scriptObj.getParameter({name:'custscript_cpm_pj_automationbrcinsert'}),
     		perThousandId = scriptObj.getParameter({name:'custscript_cpm_pj_automationper1000'}),
     		perJobId = scriptObj.getParameter({name:'custscript_cpm_pj_automationperjob'}),
     		mfgBRCItemId = scriptObj.getParameter({name:'custscript_cpm_pj_automationmfgbrc'}); 
              
-            log.debug('itemCatID',itemCatId)
-            log.debug('perThousandId',perThousandId)
-            log.debug('perJobId',perJobId)
-            log.debug('mfgBRCItemId',mfgBRCItemId)
+            log.debug('itemCatID',itemCatId);
+            log.debug('perThousandId',perThousandId);
+            log.debug('perJobId',perJobId);
+            log.debug('mfgBRCItemId',mfgBRCItemId);
             
 
     		//clear lines
@@ -63,8 +63,9 @@ function(record, search, runtime, redirect,cpm) {
     				sublistId: 'item', line: i
     			});
     		}
-    		//pj.save(); //main code:- latest
-    		pj.save({enableSourcing:false,ignoreMandatoryFields:true}); //taj added the line for testing 
+    		//saving the record without checking for mandatory fields
+    		pj.save({enableSourcing:false,ignoreMandatoryFields:true}); 
+    		
     		//clear paper records
     		search.create({
     			type: 'customrecord_cpm_paper_record',
@@ -77,11 +78,10 @@ function(record, search, runtime, redirect,cpm) {
     			});
     			return true;
     		});
-
+    		
+    		//its searches for cpm-estimate record and returns the record id and itemgroup id
     		var arrEstAndGroup = cpm.getEstimateAndGroup(formatId, pageCount);
 
-//  		log.debug('arrEstAndGroup',arrEstAndGroup.length)
-//  		log.debug('util.isArray(arrEstAndGroup)',util.isArray(arrEstAndGroup))
     		if(arrEstAndGroup.length >0){
     			if(util.isArray(arrEstAndGroup)){
     				var estimateId = arrEstAndGroup[0];

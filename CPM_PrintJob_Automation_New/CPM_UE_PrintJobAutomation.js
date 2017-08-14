@@ -9,9 +9,12 @@
  * Recalc File ID - 'custscript_recalc_fileid'
  * 
  */
-define(['N/runtime', 'N/redirect'],
+define(['N/runtime',
+		'N/redirect',
+		'N/ui/serverWidget'
+		],
 
-function(runtime, redirect) {
+function(runtime, redirect, serverWidget) {
   
    /**
      * Function definition to be triggered before record is saved.
@@ -23,8 +26,8 @@ function(runtime, redirect) {
      */
    function beforeLoad(sc){
 	   try{
+		   var printJob = sc.newRecord;
 		   if(sc.type == sc.UserEventType.COPY){
-			   var printJob = sc.newRecord;
 			   printJob.setValue({
 				   fieldId : 'custbody_cpm_automationstatus',
 				   value : ''
@@ -44,6 +47,24 @@ function(runtime, redirect) {
 				   })
 			   }
 		   }  
+		   
+		   //adding the Recalculate button on print job record in view mode.
+		   if(sc.type == sc.UserEventType.VIEW){
+			   var autoStatus = printJob.getValue('custbody_cpm_automationstatus');
+			   var pjStatus = printJob.getValue('status');
+			   
+			   if(autoStatus == 2 || autoStatus == 3 || autoStatus == 4){
+				   if(pjStatus != 'Closed - Won'){
+//					   sc.form.addButton({
+//						    id : 'custpage_cpm_recalbtn',
+//						    label : 'Recalculate 11',
+//						    functionName:'redirecToRecal('+printJob.id+')'
+//					   });
+					   sc.form.clientScriptModulePath = './CPM_CS_PrintJobClientMethods.js'; 
+				   }
+			   }
+		   }
+		   
 	   } catch (ex) {
 		   log.error(ex.name, ex.message);
 		   return false;
