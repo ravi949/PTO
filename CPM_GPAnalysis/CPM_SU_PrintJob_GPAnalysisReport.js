@@ -23,9 +23,11 @@ function(runtime, record, render, search, file) {
     function onRequestPrintGPAnalysis(context) {
     		try{
     			//Script Parameters
-    			var templateFileId = runtime.getCurrentScript('SCRIPT', 'custscript_gpa_template_fileid');
-    			var incomeSearchId = runtime.getCurrentScript('SCRIPT', 'custscript_cpm_gpa_income_search');
-    			var cogsSearchId = runtime.getCurrentScript('SCRIPT', 'custscript_cpm_gpa_cogs_search');
+    			var scriptObj = runtime.getCurrentScript();
+    			var templateFileId = scriptObj.getParameter({name: 'custscript_gpa_template_fileid'});
+    			var incomeSearchId = scriptObj.getParameter({name: 'custscript_cpm_gpa_income_search'});
+    			var cogsSearchId = scriptObj.getParameter({name: 'custscript_cpm_gpa_cogs_search'});
+    			log.debug('Script Parameters', 'templateFileId: '+templateFileId+' and incomeSearchId: '+incomeSearchId+' and cogsSearchId: '+cogsSearchId);
     			
     			var jobId = context.request.parameters('jobid');
     			
@@ -38,11 +40,8 @@ function(runtime, record, render, search, file) {
     			    id : templateFileId
     			});
     			
-    			//var templateString = templateFile.getContents();
     			var renderer = render.create();
     			var xmlOutput = null;
-    			
-    			
     			
     			renderer.templateContent = templateFile.getContents();
     			renderer.addRecord({
@@ -50,9 +49,37 @@ function(runtime, record, render, search, file) {
     			    record		 : jobRec
     			});
     			
-    			//Need to create the logic to combine 2 searches
+    			//===== Need to create the logic to combine 2 searches =====
+    			var incomeSearchObj = search.load({
+    			    id: incomeSearchId
+    			});
+
+    			var incomeSearchResults = incomeSearchObj.run().getRange({
+	    			start: 0,
+	    			end : 999
+	    		})
+
+	    		var cogsSearchObj = search.load({
+    			    id: cogsSearchId
+    			});
+
+    			var cogsSearchResults = cogsSearchObj.run().getRange({
+	    			start: 0,
+	    			end : 999
+	    		})
     			
-    				    
+    			renderer.addCustomDataSource({
+    			    format: render.DataSource.OBJECT,
+    			    alias: "income",
+    			    data: {type : 'income',list : incomesearchResults}
+    			    });
+    			
+    			renderer.addCustomDataSource({
+    			    format: render.DataSource.OBJECT,
+    			    alias: "cogs",
+    			    data: {type : 'cogs',list : cogsSearchResults}
+    			    });
+    			//========= END combine logic =========	    
     			
     			xmlOutput = renderer.renderAsString();
     			

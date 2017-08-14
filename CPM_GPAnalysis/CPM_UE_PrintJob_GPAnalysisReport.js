@@ -6,10 +6,11 @@
 define(['N/runtime', 
 		'N/url',
 		'N/search',
-		'N/record'
+		'N/record',
+		'N/runtime'
 	],
 
-function(runtime, url, search, record) {
+function(runtime, url, search, record, runtime) {
    
     /**
      * Function definition to be triggered before record is loaded.
@@ -24,6 +25,12 @@ function(runtime, url, search, record) {
     	//Script should work in "VIEW" mode and "UI" contextType
     	if (sc.type != sc.UserEventType.VIEW && runtime.executionContext != runtime.ContextType.USER_INTERFACE) return;
     	
+    	//Script Parameters
+    	var scriptObj = runtime.getCurrentScript();
+		var suiteletsid = scriptObj.getParameter({name: 'custscript_pjpue_ssid'});
+		var suiteletdid = scriptObj.getParameter({name: 'custscript_pjpue_sdid'});
+		log.debug('Script Parameters', 'Suitelet SID: '+suiteletsid+' and Suitelet DID: '+suiteletdid);
+		
     	//Search of 'INVOICE' type to fetch
     	var searchObj = search.create({
 			type : record.Type.INVOICE,
@@ -59,8 +66,8 @@ function(runtime, url, search, record) {
     	//load the backend suitelet url if the above search returns the results
     	if (searchResults.length > 0){ 
 //    		var creURL = url.resolveScript({
-//                'scriptId'			:'xxxx',  //need to give suitelet script id
-//                'deploymentId'		:'xxxxxx', //need to give suitelet deployment id
+//                'scriptId'			:suiteletsid,  //need to give suitelet script id
+//                'deploymentId'		:suiteletdid, //need to give suitelet deployment id
 //                'returnExternalUrl' : false
 //            }) + '&jobid=' + sc.newRecord.getValue("id");
     		
