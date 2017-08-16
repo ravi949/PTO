@@ -65,17 +65,17 @@ function(runtime, url, search, record, runtime) {
     	
     	//load the backend suitelet url if the above search returns the results
     	if (searchResults.length > 0){ 
-//    		var creURL = url.resolveScript({
-//                'scriptId'			:suiteletsid,  //need to give suitelet script id
-//                'deploymentId'		:suiteletdid, //need to give suitelet deployment id
-//                'returnExternalUrl' : false
-//            }) + '&jobid=' + sc.newRecord.getValue("id");
+    		var creURL = url.resolveScript({
+                'scriptId'			:suiteletsid,
+                'deploymentId'		:suiteletdid,
+                'returnExternalUrl' : false
+            }) + '&jobid=' + sc.newRecord.getValue("id");
     		
     		log.debug('sc.newRecord.getValue("id")', sc.newRecord.getValue("id"));
 
     		//inline code to work on Button click and to call the above backend suitelet.
-    		//var getPrintJobProfitability = "require([], function() { window.open('"+creURL+"','Profitability Report');});";
-    		var getPrintJobProfitability = "require([], function() { alert('Print Job Development is In-Progress...');});";
+    		var getPrintJobProfitability = "require([], function() { window.open('"+creURL+"','Profitability Report');});";
+    		//var getPrintJobProfitability = "require([], function() { alert('Print Job Development is In-Progress...');});";
     		
     		//Adding a custom button to "Print Job (Opportunity)" record before loading the form
     		sc.form.addButton({
