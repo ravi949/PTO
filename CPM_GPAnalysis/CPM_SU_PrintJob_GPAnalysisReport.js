@@ -51,6 +51,7 @@ function(runtime, record, render, search, file) {
     			});
     			
     			//===== Logic to combine both 'income' and 'cogs' searches and to pass the same to renderer object =====
+    			//Fetching all results from income search
     			var incomeSearchObj = search.load({
     			    id: incomeSearchId
     			});
@@ -58,7 +59,7 @@ function(runtime, record, render, search, file) {
     			incomeSearchObj.filters.push(search.createFilter({
     			    name: 'custcoljobnbr',
     			    operator: search.Operator.ANYOF,
-    			    values : jobRec
+    			    values : jobId
     			}));
     			
     			var incomeSearchResults = incomeSearchObj.run().getRange({
@@ -66,6 +67,31 @@ function(runtime, record, render, search, file) {
 	    			end : 999
 	    		})
 
+	    		//converting all income search results into required renderer data source
+	    		var incomeResults = [];
+
+    			if(incomeSearchResults)
+    			{
+    				log.debug('incomeSearchResults.length',incomeSearchResults.length);			
+    				for (var iTemp =0; iTemp < incomeSearchResults.length; iTemp++)
+    				{
+    			        var incomesource = {};
+    			        var incomeloopsource = {}; 
+    			        
+    			        incomesource.account = incomeSearchResults[iTemp].getText({ name: 'account', summary: search.Summary.GROUP });
+    			        incomesource.type = incomeSearchResults[iTemp].getText({ name: 'type', summary: search.Summary.GROUP });
+    			        incomesource.tranid = incomeSearchResults[iTemp].getValue({ name: 'tranid', summary: search.Summary.GROUP });
+    			        incomesource.trandate = incomeSearchResults[iTemp].getValue({ name: 'trandate', summary: search.Summary.MAX });
+    			        incomesource.mainname = incomeSearchResults[iTemp].getText({ name: 'mainname', summary: search.Summary.GROUP }); 
+    			        incomesource.memo = incomeSearchResults[iTemp].getValue({ name: 'memo', summary: search.Summary.GROUP });
+    			        incomesource.amount = incomeSearchResults[iTemp].getValue({ name: 'amount', summary: search.Summary.SUM });
+
+    			        incomeloopsource.values = incomesource;
+    			        incomeResults.push(incomeloopsource);
+    				}
+    			}
+	    		
+    			//Fetching all results from cogs search   		
 	    		var cogsSearchObj = search.load({
     			    id: cogsSearchId
     			});
@@ -73,7 +99,7 @@ function(runtime, record, render, search, file) {
     			cogsSearchObj.filters.push(search.createFilter({
     			    name: 'custcoljobnbr',
     			    operator: search.Operator.ANYOF,
-    			    values : jobRec
+    			    values : jobId
     			}));
     			
     			var cogsSearchResults = cogsSearchObj.run().getRange({
@@ -81,17 +107,45 @@ function(runtime, record, render, search, file) {
 	    			end : 999
 	    		})
     			
+	    		//converting all cogs search results into required renderer data source
+	    		var cogsResults = [];
+
+    			if(cogsSearchResults)
+    			{
+    				log.debug('cogsSearchResults.length',cogsSearchResults.length);			
+    				for (var jTemp =0; jTemp < cogsSearchResults.length; jTemp++)
+    				{
+    			        var cogssource = {};
+    			        var cogsloopsource = {};
+    			        
+    			        cogssource.account = cogsSearchResults[jTemp].getText({ name: 'account', summary: search.Summary.GROUP });
+    			        cogssource.type = cogsSearchResults[jTemp].getText({ name: 'type', summary: search.Summary.GROUP });
+    			        cogssource.tranid = cogsSearchResults[jTemp].getValue({ name: 'tranid', summary: search.Summary.GROUP });
+    			        cogssource.trandate = cogsSearchResults[jTemp].getValue({ name: 'trandate', summary: search.Summary.MAX });
+    			        cogssource.mainname = cogsSearchResults[jTemp].getText({ name: 'mainname', summary: search.Summary.GROUP }); 
+    			        cogssource.memo = cogsSearchResults[jTemp].getValue({ name: 'memo', summary: search.Summary.GROUP });
+    			        cogssource.amount = cogsSearchResults[jTemp].getValue({ name: 'amount', summary: search.Summary.SUM });
+
+    			        cogsloopsource.values = cogssource;
+    			        cogsResults.push(cogsloopsource);
+    				}
+    			}
+    			
+    			//attaching the converted custom data source income search results to renderer 
     			renderer.addCustomDataSource({
     			    format: render.DataSource.OBJECT,
     			    alias: 'income',
-    			    data: {type : 'income', list : incomeSearchResults}
-    			    });
+    			    data: {type : 'income', list : incomeResults }
+    			});
     			
+    			//attaching the converted custom data source cogs search results to renderer
     			renderer.addCustomDataSource({
     			    format: render.DataSource.OBJECT,
     			    alias: 'cogs',
-    			    data: {type : 'cogs', list : cogsSearchResults}
-    			    });
+    			    data: {type : 'cogs', list : cogsResults}
+    			});
+//    			log.debug('incomeResults', incomeResults);
+//    			log.debug('cogsResults', cogsResults);
     			//============================================= END combine logic ======================================	    
     			
     			xmlOutput = renderer.renderAsString();
@@ -103,7 +157,7 @@ function(runtime, record, render, search, file) {
     			context.response.write(xmlOutput);
     		}catch(e){
     			log.debug(e.name, e.message);
-    			log.debug('Available Usage', runtime.getCurrentScript().getRemainingUsage());
+    			log.debug('Available Usage:', runtime.getCurrentScript().getRemainingUsage());
     		}
     }
     

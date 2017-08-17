@@ -99,7 +99,7 @@
 </style>
 </head>
 <body header="nlheader" header-height="10%" footer="nlfooter" footer-height="20pt" padding="0.5in 0.5in 0.5in 0.5in" size="Landscape">
-    <table style="width: 100%; margin-top: 10px;">
+   <table style="width: 100%; margin-top: 10px;">
 		<tr>
 			<th colspan="2">${record.tranid@label}</th>
 			<th colspan="2">${record.entity@label}</th>
@@ -130,17 +130,17 @@
 		<tr>
 			<td colspan="12" align="left"><b><u><i>Sales</i></u></b></td>
 		</tr>
-	 <!--<#list income.list as income>
+	 <#list income.list as income>
 		<tr>
-			<td colspan="2">${income.}</td>
-			<td colspan="1">${income.}</td>
-			<td colspan="1">${income.}</td>
-			<td colspan="1">${income.}</td>
-			<td colspan="2">${income.}</td>
-			<td colspan="4">${income.}</td>
-			<td colspan="1" align="right">${income.custrecord_cpm_gpa_ssh_amount}</td>  
+			<td colspan="2">${income.values.account}</td>
+			<td colspan="1">${income.values.type}</td>
+			<td colspan="1">${income.values.tranid}</td>
+			<td colspan="1">${income.values.trandate}</td>
+			<td colspan="2">${income.values.mainname}</td>
+			<td colspan="4">${income.values.memo}</td>
+			<td colspan="1" align="right">${income.values.amount}</td>  
 		</tr>
-	</#list> -->
+	</#list>
 		<tr>
 			<th align="right" colspan="10"><b>Sales Subtotal</b> :</th>
 			<th colspan="2" align="right">${record.custbody_cpm_pjp_incometotal}</th>
@@ -149,17 +149,17 @@
 		<tr>
 			<td colspan="12" align="left"><b><u><i>COGS</i></u></b></td>
 		</tr>
-	<!-- <#list cogs.list as cogs>
+	<#list cogs.list as cogs>
 		<tr>
-			<td colspan="2">${cogs.custrecord_cpm_gpa_ssh_account}</td>
-			<td colspan="1">${cogs.custrecord_cpm_gpa_ssh_type}</td>
-			<td colspan="1">${cogs.custrecord_cpm_gpa_ssh_docnum}</td>
-			<td colspan="1">${cogs.custrecord_cpm_gpa_ssh_date}</td>
-			<td colspan="2">${cogs.custrecord_cpm_gpa_ssh_mainname}</td>
-			<td colspan="4">${cogs.custrecord_cpm_gpa_ssh_memo}</td>
-			<td colspan="1" align="right">${cogs.custrecord_cpm_gpa_ssh_amount}</td>
+			<td colspan="2">${cogs.values.account}</td>
+			<td colspan="1">${cogs.values.type}</td>
+			<td colspan="1">${cogs.values.tranid}</td>
+			<td colspan="1">${cogs.values.trandate}</td>
+			<td colspan="2">${cogs.values.mainname}</td>
+			<td colspan="4">${cogs.values.memo}</td>
+			<td colspan="1" align="right">${cogs.values.amount}</td>
 		</tr>
-	</#list> -->
+	</#list>
 		<tr>
 			<th align="right" colspan="10"><b>COGS Subtotal</b> :</th>
 			<th colspan="2" align="right">${record.custbody_cpm_pjp_cogstotal}</th>
