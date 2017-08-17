@@ -84,7 +84,7 @@ function(runtime, record, render, search, file) {
     			        incomesource.trandate = incomeSearchResults[iTemp].getValue({ name: 'trandate', summary: search.Summary.MAX });
     			        incomesource.mainname = incomeSearchResults[iTemp].getText({ name: 'mainname', summary: search.Summary.GROUP }); 
     			        incomesource.memo = incomeSearchResults[iTemp].getValue({ name: 'memo', summary: search.Summary.GROUP });
-    			        incomesource.amount = incomeSearchResults[iTemp].getValue({ name: 'amount', summary: search.Summary.SUM });
+    			        incomesource.amount = (incomeSearchResults[iTemp].getValue({ name: 'amount', summary: search.Summary.SUM })).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     			        incomeloopsource.values = incomesource;
     			        incomeResults.push(incomeloopsource);
@@ -124,7 +124,7 @@ function(runtime, record, render, search, file) {
     			        cogssource.trandate = cogsSearchResults[jTemp].getValue({ name: 'trandate', summary: search.Summary.MAX });
     			        cogssource.mainname = cogsSearchResults[jTemp].getText({ name: 'mainname', summary: search.Summary.GROUP }); 
     			        cogssource.memo = cogsSearchResults[jTemp].getValue({ name: 'memo', summary: search.Summary.GROUP });
-    			        cogssource.amount = cogsSearchResults[jTemp].getValue({ name: 'amount', summary: search.Summary.SUM });
+    			        cogssource.amount = (cogsSearchResults[jTemp].getValue({ name: 'amount', summary: search.Summary.SUM })).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     			        cogsloopsource.values = cogssource;
     			        cogsResults.push(cogsloopsource);
