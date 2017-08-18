@@ -6,11 +6,10 @@
 define(['N/runtime', 
 		'N/url',
 		'N/search',
-		'N/record',
-		'N/runtime'
+		'N/record'
 	],
 
-function(runtime, url, search, record, runtime) {
+function(runtime, url, search, record) {
    
     /**
      * Function definition to be triggered before record is loaded.
@@ -24,7 +23,8 @@ function(runtime, url, search, record, runtime) {
     function beforeLoadPrintGPAnalysis(sc) {
     	try{
     		//Script should work in "VIEW" mode and "UI" contextType
-        	if (sc.type != sc.UserEventType.VIEW && runtime.executionContext != runtime.ContextType.USER_INTERFACE) return;
+        	if (runtime.executionContext != runtime.ContextType.USER_INTERFACE) return;
+        	if (sc.type != sc.UserEventType.VIEW) return;
         	
         	//Script Parameters
         	var scriptObj = runtime.getCurrentScript();
