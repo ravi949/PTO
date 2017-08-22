@@ -202,7 +202,7 @@ function(record, runtime, redirect, search, cpm) {
 							spoilage: '0',
 							price: '0',
 							markup: '0',
-							itemUnit: printJob.getCurrentSublistValue({sublistId : 'item', fieldId : 'unit'}),
+							itemUnit: printJob.getCurrentSublistValue({sublistId : 'item', fieldId : 'units'}),
 							itemPurchaseUnit:itemPurchaseUnit,
 							priceLevel:undefined,
 							costfound:false

@@ -55,11 +55,11 @@ function(runtime, redirect, serverWidget) {
 			   
 			   if(autoStatus == 2 || autoStatus == 3 || autoStatus == 4){
 				   if(pjStatus != 'Closed - Won'){
-//					   sc.form.addButton({
-//						    id : 'custpage_cpm_recalbtn',
-//						    label : 'Recalculate 11',
-//						    functionName:'redirecToRecal('+printJob.id+')'
-//					   });
+					   sc.form.addButton({
+						    id : 'custpage_cpm_recalbtn',
+						    label : 'Recalculate 11',
+						    functionName:'redirecToRecal('+printJob.id+')'
+					   });
 					   sc.form.clientScriptModulePath = './CPM_CS_PrintJobClientMethods.js'; 
 				   }
 			   }

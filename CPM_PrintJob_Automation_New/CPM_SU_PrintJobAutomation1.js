@@ -103,6 +103,19 @@ function(record, search, runtime, redirect,cpm) {
     			}
     		}else {
     			log.error('','There are no Estimation records found for the Format and Page Count entered on the Print Job(Internal Id: '+pjid+').');
+    			
+    			pj.submitFields({
+					type:record.Type.OPPORTUNITY,
+					id:pjid,
+					 values: {
+						 custbody_cpm_automationstatus: 4
+					 },
+					 options: {
+					     enableSourcing: false,
+					     ignoreMandatoryFields : true
+					 }
+				});
+    			
     			redirect.toRecord({
     				type : record.Type.OPPORTUNITY, 
     				id : pjid 

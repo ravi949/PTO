@@ -28,6 +28,12 @@ function(message,url) {
      */
     function redirectToRecal(pjid){
     	displayMessage();
+    	var suiteletURL = url.resolveScript({
+    		scriptId: 'customscript_cpm_pj_recalsuitelet3',
+    		deploymentId: 'customdeploy_cpm_pj_recalsuitelet3',
+    		returnExternalUrl: false
+    	});
+    	window.location.href = window.origin+suiteletURL+'&pjid='+pjid;
     }
 
     return {
