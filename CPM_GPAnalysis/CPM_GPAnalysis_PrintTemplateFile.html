@@ -99,7 +99,7 @@
 </style>
 </head>
 <body header="nlheader" header-height="10%" footer="nlfooter" footer-height="20pt" padding="0.5in 0.5in 0.5in 0.5in" size="Landscape">
-    <table style="width: 100%; margin-top: 10px;">
+   <table style="width: 100%; margin-top: 10px;">
 		<tr>
 			<th colspan="2">${record.tranid@label}</th>
 			<th colspan="2">${record.entity@label}</th>
@@ -130,18 +130,16 @@
 		<tr>
 			<td colspan="12" align="left"><b><u><i>Sales</i></u></b></td>
 		</tr>
-	<#list custtrans as income>
-	<#if income.custrecord_cpm_gpa_ssh_rectype=='income'>
+	 <#list income.list as income>
 		<tr>
-			<td colspan="2"></td>
-			<td colspan="1"></td>
-			<td colspan="1"></td>
-			<td colspan="1"></td>
-			<td colspan="2"></td>
-			<td colspan="4"></td>
-			<td colspan="1" align="right">${income.custrecord_cpm_gpa_ssh_amount}</td>
+			<td colspan="2">${income.values.account}</td>
+			<td colspan="1">${income.values.type}</td>
+			<td colspan="1">${income.values.tranid}</td>
+			<td colspan="1">${income.values.trandate}</td>
+			<td colspan="2">${income.values.mainname}</td>
+			<td colspan="4">${income.values.memo}</td>
+			<td colspan="1" align="right">${income.values.amount}</td>  
 		</tr>
-	</#if>
 	</#list>
 		<tr>
 			<th align="right" colspan="10"><b>Sales Subtotal</b> :</th>
@@ -151,18 +149,16 @@
 		<tr>
 			<td colspan="12" align="left"><b><u><i>COGS</i></u></b></td>
 		</tr>
-	<#list custtrans as income>
-	<#if income.custrecord_cpm_gpa_ssh_rectype=='cogs'>
+	<#list cogs.list as cogs>
 		<tr>
-			<td colspan="2">${income.custrecord_cpm_gpa_ssh_account}</td>
-			<td colspan="1">${income.custrecord_cpm_gpa_ssh_type}</td>
-			<td colspan="1">${income.custrecord_cpm_gpa_ssh_docnum}</td>
-			<td colspan="1">${income.custrecord_cpm_gpa_ssh_date}</td>
-			<td colspan="2">${income.custrecord_cpm_gpa_ssh_mainname}</td>
-			<td colspan="4">${income.custrecord_cpm_gpa_ssh_memo}</td>
-			<td colspan="1" align="right">${income.custrecord_cpm_gpa_ssh_amount}</td>
+			<td colspan="2">${cogs.values.account}</td>
+			<td colspan="1">${cogs.values.type}</td>
+			<td colspan="1">${cogs.values.tranid}</td>
+			<td colspan="1">${cogs.values.trandate}</td>
+			<td colspan="2">${cogs.values.mainname}</td>
+			<td colspan="4">${cogs.values.memo}</td>
+			<td colspan="1" align="right">${cogs.values.amount}</td>
 		</tr>
-	</#if>
 	</#list>
 		<tr>
 			<th align="right" colspan="10"><b>COGS Subtotal</b> :</th>
