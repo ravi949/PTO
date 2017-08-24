@@ -254,7 +254,7 @@ function(record, runtime, redirect, search, cpm) {
 			}
 		} catch (ex) {
 			log.error(ex.name, ex.message);
-			cpm.setFailed(pjid);
+			cpm.setFailed(printJobId);
 			return false;
 		}
 	}
