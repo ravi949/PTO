@@ -128,8 +128,8 @@ function(search,record,runtime,cpm) {
         	var estimateId = pjObj.estimateId,
     		estQty = pjObj.estQty,
     		brcQty = pjObj.brcQty,
-    		customerId = pjObj.customerId,
-    		vendorId = pjObj.vendorId;
+    		customer = pjObj.customerId,
+    		vendor = pjObj.vendorId;
         	
         	//Mfg : BRC Item and Units ID's
     		var scriptObj = runtime.getCurrentScript(),
@@ -174,13 +174,14 @@ function(search,record,runtime,cpm) {
     					filters:[['internalid','is',itemId]]
     				}).run().getRange(0,1)[0].getValue('purchaseunit');
 
+    				var customerId = customer;
     				if (include){//line is included
     					if (itemId != mfgBrcItemId){ //mfg Brc Item
 
     						//get cost
 							hasVolumeCost = (hasVolumeCost == 'T')?true:false;
 							hasVendorCost = (hasVendorCost == 'T')?true:false;
-							vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
+							vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
 
 							//getting the cost record and customer condition
 							function getCostRecordList(vendorId,hasVolumeCost,forVolume){
@@ -192,7 +193,7 @@ function(search,record,runtime,cpm) {
 
 							//Cost calculations scenario's					
 							if(hasVolumeCost && hasVendorCost ){ //scenario G		
-								vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
+								vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
 								costRecord = getCostRecordList(vendorId,hasVolumeCost,true); //true for forvolume
 							}
 
@@ -220,7 +221,7 @@ function(search,record,runtime,cpm) {
 							var isVolumePrice = (hasVolumePricing == 'T')?true:false; //taj added
 
 							customerId = (hasCustomerPrice)? customerId : null;
-							vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
+							vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
 						
 							if(costRecord.spoilage > 0 && itemPurchaseUnit != perJobId) //equal to perjob
 								quantity = parseFloat(quantity)*(1 + parseFloat(costRecord.spoilage)/100);

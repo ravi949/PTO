@@ -86,7 +86,7 @@ function(record, runtime, redirect, search, cpm) {
 							//get cost
 							hasVolumeCost = (hasVolumeCost == 'T')?true:false;
 							hasVendorCost = (hasVendorCost == 'T')?true:false;
-							var vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
+							var vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
 
 							//getting the cost record and customer condition
 							function getCostRecordList(vendorId,hasVolumeCost,forVolume){
