@@ -103,7 +103,7 @@ function(record, search, runtime, redirect,cpm) {
     			}
     		}else {
     			//log.error('Records Not Found','There are no Estimation records found for the Format and Page Count entered on the Print Job(Internal Id: '+pjid+').');
-    			throw new Error({name:'Record Not Found',message:'There are no CPM Estimation records found for the Format and Page Count entered on the Print Job(Internal Id: '+pjid+').'});
+    			throw {name:'Record Not Found',message:'There are no CPM Estimation records found for the Format and Page Count entered on the Print Job(Internal Id: '+pjid+').'};
     			
     			redirect.toRecord({
     				type : record.Type.OPPORTUNITY, 
