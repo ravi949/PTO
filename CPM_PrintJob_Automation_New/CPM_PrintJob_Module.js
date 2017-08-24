@@ -243,6 +243,24 @@ function(search, record) {
 	}
 	
 	/**
+	 * @param printJobId
+	 * @returns
+	 */
+	function setAutomationFailed(printJobId){
+		var printJob = record.load({
+			type: record.Type.OPPORTUNITY,
+			id: printJobId
+		});
+		printJob.setValue({
+			fieldId:'custbody_cpm_automationstatus', 
+			value:'4'
+		});
+		
+		printJob.save({enableSourcing:true,ignoreMandatoryFields:true});  //main code:- latest
+		log.audit('Failed', 'PrintJob marked Complete');
+	}
+	
+	/**
 	 * 
 	 * @param {String} printJobId
 	 * @returns
@@ -704,6 +722,7 @@ function(search, record) {
         getPriceRecord : getPriceRecord,
         setLineValues : setLineValues,
         setCompleted : setAutomationComplete,
+        setFailed : setAutomationFailed,
         getItemPriceLevel:getItemPriceLevel
     };
     
