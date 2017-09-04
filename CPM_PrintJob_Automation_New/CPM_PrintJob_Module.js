@@ -310,19 +310,19 @@ function(search, record) {
 				
 				if (lineValue.markup != null && lineValue.markup != '0' && lineValue.costfound){
 					
-					var estCostValue = (lineValue.item == mfgBrcItemId)?lineValue.cost:estCost; // taj added the new line for brc item condition
+					var calCost = (lineValue.item == mfgBrcItemId)?lineValue.cost:estCost; // taj added the new line for brc item condition
 					
 					if(lineValue.spoilage == 0){
-						estCostValue = lineValue.cost;
+						calCost = lineValue.cost;
 					}
 					
 					//taj added this condition
 					if(lineValue.itemUnit == eachId || lineValue.itemUnit == perJobId){   //equal to each
-					    rate = estCostValue * (1 + parseFloat(lineValue.markup)/100);
+					    rate = calCost * (1 + parseFloat(lineValue.markup)/100);
 					}
 
 					if(lineValue.itemUnit == perThousandId){  //equal to per 1000
-						 rate = estCostValue * (1 + parseFloat(lineValue.markup)/100);
+						 rate = calCost * (1 + parseFloat(lineValue.markup)/100);
 					     amount = (lineValue.quantity * rate)/1000;
 					}
 					
