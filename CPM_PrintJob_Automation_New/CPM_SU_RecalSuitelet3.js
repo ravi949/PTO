@@ -42,7 +42,8 @@ function(record, runtime, redirect, search, cpm) {
 		mfgBrcItemId = scriptObj.getParameter({name:'custscript_cpm_pj_recalmfgbrcitem'}),
 		eachId = scriptObj.getParameter({name:'custscript_cpm_pj_recaleach'}),
 		perJobId = scriptObj.getParameter({name:'custscript_cpm_pj_recalperjob'}),
-		perThousandId = scriptObj.getParameter({name:'custscript_cpm_pj_recalper1000'});
+		perThousandId = scriptObj.getParameter({name:'custscript_cpm_pj_recalper1000'}),
+		itemCatId = scriptObj.getParameter({name:'custscript_cpm_pj_recalitemcat'});
 
 
     	var itemLineCount = printJob.getLineCount({sublistId : 'item'});
@@ -175,7 +176,12 @@ function(record, runtime, redirect, search, cpm) {
     	    					itemUnit: itemUnit,
     	    					itemPurchaseUnit:itemPurchaseUnit,
     	    					priceLevel:0,//priceRecord.hasOwnProperty('priceLevel')?priceRecord.priceLevel:undefined,
-    	    					costfound:costRecord.found
+    	    					costfound:costRecord.found,
+    	    					brcItem:(itemCatId == itemCategory),
+    	    					incprice:(priceRecord.incprice)?priceRecord.incprice:0,//inc-price new column
+    	    					priceqtyfloor:(priceRecord.priceqtyfloor)?priceRecord.priceqtyfloor:0, //inc-price new column
+    	    	    			inccost:(costRecord.inccost)?costRecord.inccost:0,//inc-cost new column
+    	    	    			costqtyfloor:(costRecord.costqtyfloor)?costRecord.costqtyfloor:0 //inc-cost new column		
     	    				});
     	    			} else {
     	    				var vendorId = (selVendor != '' && selVendor != null)? selVendor : brcVendor; //default brc vendor
@@ -207,7 +213,12 @@ function(record, runtime, redirect, search, cpm) {
         					itemUnit: printJob.getCurrentSublistValue({sublistId : 'item', fieldId : 'units'}),
         					itemPurchaseUnit:itemPurchaseUnit,
         					priceLevel:0,
-        					costfound:false
+        					costfound:false,
+        					brcItem:(itemCatId == itemCategory),
+	    					incprice:0,//inc-price new column
+	    					priceqtyfloor:0, //inc-price new column
+	    	    			inccost:0,//inc-cost new column
+	    	    			costqtyfloor:0 //inc-cost new column
         				});
         			}
         			if(runtime.getCurrentScript().getRemainingUsage() <= 400){

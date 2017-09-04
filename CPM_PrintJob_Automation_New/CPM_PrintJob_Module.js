@@ -65,7 +65,7 @@ function(search, record) {
 				estqty = pj.getValue({fieldId: 'custbodyestqty'}),
 				brcqty = pj.getValue({fieldId: 'custbody_cpm_printjob_brcquantity'}),
 				flag = true;
-			log.debug('itemCatId',itemCatId)
+			
 			itemGroupSearch.run().each(function(line){
 				var lQty = null, 
 					itemId = line.getValue('memberItem'),
@@ -293,98 +293,149 @@ function(search, record) {
 		
 		objArray.forEach(function(lineValue){
 			try{
+				
 				printJob.selectLine({
-					sublistId: 'item', line: lineValue.lineNo
-				});
-				printJob.setCurrentSublistValue({
 					sublistId: 'item',
-					fieldId: 'quantity',
-					value: lineValue.quantity
-				});
-				printJob.setCurrentSublistValue({
-					sublistId: 'item',
-					fieldId: 'costestimatetype',
-					value: 'CUSTOM'
+					line: lineValue.lineNo
 				});
 				
-				var estCost = 0;
+				var estCost = 0,rate = 0, amount = 0;
+				lineValue.priceLevel = (lineValue.priceLevel)?lineValue.priceLevel:-1
+				
 				if (lineValue.itemPurchaseUnit == perThousandId){  //equal to per 1000
 					estCost = lineValue.quantity * ((parseFloat(lineValue.cost))/1000);
 				} else {
 					estCost = lineValue.quantity * parseFloat(lineValue.cost);
 				}
 				
-				printJob.setCurrentSublistValue({
-					sublistId: 'item',
-					fieldId: 'costestimate',
-					value: estCost
-				});
-				
-				if(lineValue.priceLevel != 0){
-					printJob.setCurrentSublistValue({
-						sublistId: 'item',
-						fieldId: 'price',
-						value: (lineValue.priceLevel)?lineValue.priceLevel:-1
-					});
-				}
-				
-				
 				if (lineValue.markup != null && lineValue.markup != '0' && lineValue.costfound){
-					var rate = 0, amount = 0;
 					
-					estCost = (lineValue.item == mfgBrcItemId)?lineValue.cost:estCost; // taj added the new line for brc item condition
+					var estCostValue = (lineValue.item == mfgBrcItemId)?lineValue.cost:estCost; // taj added the new line for brc item condition
 					
 					if(lineValue.spoilage == 0){
-						estCost = lineValue.cost;
+						estCostValue = lineValue.cost;
 					}
 					
 					//taj added this condition
 					if(lineValue.itemUnit == eachId || lineValue.itemUnit == perJobId){   //equal to each
-					    rate = estCost * (1 + parseFloat(lineValue.markup)/100);
+					    rate = estCostValue * (1 + parseFloat(lineValue.markup)/100);
 					}
 
 					if(lineValue.itemUnit == perThousandId){  //equal to per 1000
-						 rate = estCost * (1 + parseFloat(lineValue.markup)/100);
+						 rate = estCostValue * (1 + parseFloat(lineValue.markup)/100);
 					     amount = (lineValue.quantity * rate)/1000;
-					}
-										
-					printJob.setCurrentSublistValue({
-						sublistId: 'item',
-						fieldId: 'rate',
-						value: rate
-					});
-					
-					if(amount > 0){
-						printJob.setCurrentSublistValue({
-							sublistId: 'item',
-							fieldId: 'amount',
-							value: round(amount,3)
-						});
 					}
 					
 				} else {
-					var rate = lineValue.price, amount = 0;
-					
-					printJob.setCurrentSublistValue({
-						sublistId: 'item',
-						fieldId: 'rate',
-						value: rate
-					});
+					rate = lineValue.price; 
+					amount = 0;
 					
 					if (lineValue.itemUnit == perThousandId){  //equal to per 1000
 						amount = parseFloat(rate) * ((lineValue.quantity)/1000);
 					} else {
 						amount = parseFloat(rate) * lineValue.quantity;
 					}
-					
-					if(amount > 0){
-						printJob.setCurrentSublistValue({
-							sublistId: 'item',
-							fieldId: 'amount',
-							value: round(amount,3)
-						});
-					}
 				}
+				
+				
+				//incremental price and cost value calculations				
+				if(lineValue.itemUnit == 7){
+					//price incremental calculations
+					var estQty = parseFloat(printJob.getValue({fieldId :'custbodyestqty'}));
+					var brcQty = parseFloat(printJob.getValue({fieldId:'custbody_cpm_printjob_brcquantity'}));
+					lineValue.quantity = (lineValue.brcItem)?brcQty:estQty;
+					lineValue.priceLevel = -1;
+					
+					var qtyFloor = parseFloat(lineValue.priceqtyfloor);
+					var incQty = estQty - qtyFloor;
+					var incPrice = lineValue.incprice;
+					var incAmount = (incPrice * incQty)/1000;
+					incAmount = (incAmount)?incAmount:0;
+					amount = incAmount + amount;
+					
+					//cost incremental calculation
+					var costQtyFloor = parseFloat(lineValue.costqtyfloor);
+					var incCostQty = estQty - costQtyFloor;
+					var estCostline = parseFloat(lineValue.inccost);
+					var estcostamount = (incCostQty * estCostline)/1000;
+					estcostamount = (estcostamount)?estcostamount:0;
+					estCost = parseFloat(estCost)+estcostamount;
+					
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'custcol_cpm_incpriceqty',
+						value: incQty
+					});
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'custcol_cpm_incprice',
+						value: incPrice
+					});
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'custcol_cpm_incpriceamt',
+						value: incAmount
+					});
+
+
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'custcol_cpm_inccostqty',
+						value: incCostQty // inc cost qty
+					});
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'custcol_cpm_inccost',
+						value: estCostline // inc cost
+					});
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'custcol_cpm_inccostamt',
+						value: estcostamount // inc cost amount
+					});
+				}
+				
+				
+				printJob.setCurrentSublistValue({
+					sublistId: 'item',
+					fieldId: 'quantity',
+					value: lineValue.quantity
+				});
+				
+				if(lineValue.priceLevel != 0){
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'price',
+						value: lineValue.priceLevel
+					});
+				}
+				
+				printJob.setCurrentSublistValue({
+					sublistId: 'item',
+					fieldId: 'rate',
+					value: rate
+				});
+				
+				
+				if(amount > 0){
+					printJob.setCurrentSublistValue({
+						sublistId: 'item',
+						fieldId: 'amount',
+						value: round(amount,3)
+					});
+				}
+				
+				printJob.setCurrentSublistValue({
+					sublistId: 'item',
+					fieldId: 'costestimatetype',
+					value: 'CUSTOM'
+				});
+				
+				printJob.setCurrentSublistValue({
+					sublistId: 'item',
+					fieldId: 'costestimate',
+					value: estCost
+				});
 				
 				log.debug('item values '+lineValue.item,' pricelevel='+lineValue.priceLevel+' quantity='+lineValue.quantity+' costesimate='+estCost+' rate='+rate+' amount='+amount);
 				
@@ -460,7 +511,13 @@ function(search, record) {
 		//search for the cpm estimation price records.
 		var priceSearch = search.create({
 			type:'customrecord_cpm_estimationprice',
-			columns:[sortedColumn,'custrecord_cpm_est_price_itemprice','custrecord_cpm_est_price_unit','custrecord_cpm_est_cost_markup'],
+			columns:[sortedColumn,
+					'custrecord_cpm_est_price_itemprice',
+					'custrecord_cpm_est_price_unit',
+					'custrecord_cpm_est_cost_markup',
+					'custrecord_cpm_est_cost_incrementprice',
+			        'custrecord_cpm_est_price_qtyfloor'
+					],
 			filters:priceRecordSearch.filters
 		});
 		
@@ -471,6 +528,8 @@ function(search, record) {
 				priceRecord.price = result.getValue({name: 'custrecord_cpm_est_price_itemprice'});
 				priceRecord.unit = result.getValue({name: 'custrecord_cpm_est_price_unit'});
 				priceRecord.markup = result.getValue({name: 'custrecord_cpm_est_cost_markup'});
+				priceRecord.incprice = result.getValue({name: 'custrecord_cpm_est_cost_incrementprice'});//inc-price new field
+				priceRecord.priceqtyfloor = result.getValue({name: 'custrecord_cpm_est_price_qtyfloor'});//inc-price new field
 				if (priceRecord.markup != null && priceRecord.markup != ''){
 					priceRecord.markup = parseFloat(priceRecord.markup);
 				} else {
@@ -591,7 +650,13 @@ function(search, record) {
 		//search for the cpm estimation cost records.
 		var costSearch = search.create({
 			type:'customrecord_cpm_estimationcost',
-			columns:[sortedColumn,'custrecord_cpm_est_cost_itemcost','custrecord_cpm_est_cost_unit','custrecord_cpm_est_cost_spoilagefactor'],
+			columns:[sortedColumn,
+					'custrecord_cpm_est_cost_itemcost',
+					'custrecord_cpm_est_cost_unit',
+					'custrecord_cpm_est_cost_spoilagefactor',
+					'custrecord_cpm_est_cost_incrementcost',
+			        'custrecord_cpm_est_cost_qtyfloor'
+					],
 			filters:costRecordSearch.filters
 		});
 		var costRecord = null;
@@ -601,6 +666,8 @@ function(search, record) {
 				costRecord.cost = result.getValue({name: 'custrecord_cpm_est_cost_itemcost'});
 				costRecord.unit = result.getValue({name: 'custrecord_cpm_est_cost_unit'});
 				costRecord.spoilage = result.getValue({name: 'custrecord_cpm_est_cost_spoilagefactor'});
+				costRecord.inccost = result.getValue({name: 'custrecord_cpm_est_cost_incrementcost'});//inc-cost new field
+				costRecord.costqtyfloor = result.getValue({name: 'custrecord_cpm_est_cost_qtyfloor'});//inc-cost new field
 				costRecord.found = true;
 				if (costRecord.spoilage != null && costRecord.spoilage != ''){
 					costRecord.spoilage = parseFloat(costRecord.spoilage);
