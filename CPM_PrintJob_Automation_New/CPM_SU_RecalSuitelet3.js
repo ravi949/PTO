@@ -32,7 +32,7 @@ function(record, runtime, redirect, search, cpm) {
     	});
     	//get main values
 		var estimateId = cpm.getEstimateId(printJob.getValue({fieldId : 'custbody_cpm_printjob_format'}), printJob.getValue({fieldId : 'custbody_cpm_printjob_pagecount'})),
-			customerId = printJob.getValue({fieldId : 'entity'}),
+			customer = printJob.getValue({fieldId : 'entity'}),
 			vendor = printJob.getValue({fieldId : 'custbodyvndrawarder'});
 		
 		//Script parameters
@@ -73,6 +73,7 @@ function(record, runtime, redirect, search, cpm) {
 	    					filters:[['internalid','is',itemId]]
 	    				}).run().getRange(0,1)[0].getValue('purchaseunit');
 
+	    			var customerId = customer;
     	    		if (include){
     	    			if (itemId != mfgBrcItemId){  //not equal to mfg:brc item
     	    				

@@ -542,7 +542,6 @@ function(search, record) {
 			}
 			return false;
 		});
-		log.debug('price record'+itemId,priceRecord);
 		return priceRecord;
 	}
 	
@@ -595,7 +594,6 @@ function(search, record) {
 			}
 			return false;
 		});
-		log.debug(' brc cost record'+itemId,costRecord);
 		return costRecord;
 	}
 	
@@ -681,7 +679,6 @@ function(search, record) {
 			}
 			return false;
 		});
-		log.debug('cost record'+itemId,costRecordSearch.filters);
 		return costRecord;
 	}
    
