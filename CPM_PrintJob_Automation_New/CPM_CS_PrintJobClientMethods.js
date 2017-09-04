@@ -16,7 +16,7 @@ function(message,url) {
 	function displayMessage(){
 		message.create({
 			title: "Recalculating", 
-	        message: "Please wait while you are redirected to the recalculate process.", 
+	        message: "Please wait until we complete the recalculate process.", 
 	        type: message.Type.INFORMATION
 		}).show();
 	}

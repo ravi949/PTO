@@ -95,7 +95,7 @@ function(record, runtime, redirect, search, cpm) {
     	    				
     	    				//Cost calculations scenario's					
 							if(hasVolumeCost && hasVendorCost ){ //scenario G		
-								vendorId = (selVendor != '' && selVendor != null)? selVendor : vendorId;
+								vendorId = (selVendor != '' && selVendor != null)? selVendor : vendor;
 								costRecord = getCostRecordList(vendorId,hasVolumeCost,true); //true for forvolume
 							}
 
@@ -104,7 +104,7 @@ function(record, runtime, redirect, search, cpm) {
 								costRecord = getCostRecordList(vendorId,hasVolumeCost,true); //true for forvolume
 							}	
 
-							if(costRecord == null && (hasVendorCost && !hasVolumeCost)){ //scenario E
+							if(costRecord == null && hasVendorCost && !hasVolumeCost){ //scenario E
 								costRecord = getCostRecordList(vendorId,hasVolumeCost,false); //false for forvolume
 							}
 

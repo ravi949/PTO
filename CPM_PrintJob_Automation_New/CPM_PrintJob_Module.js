@@ -347,7 +347,7 @@ function(search, record) {
 					lineValue.priceLevel = -1;
 					
 					var qtyFloor = parseFloat(lineValue.priceqtyfloor);
-					var incQty = estQty - qtyFloor;
+					var incQty = lineValue.quantity - qtyFloor;
 					var incPrice = lineValue.incprice;
 					var incAmount = (incPrice * incQty)/1000;
 					incAmount = (incAmount)?incAmount:0;
@@ -355,11 +355,13 @@ function(search, record) {
 					
 					//cost incremental calculation
 					var costQtyFloor = parseFloat(lineValue.costqtyfloor);
-					var incCostQty = estQty - costQtyFloor;
+					var incCostQty = lineValue.quantity - costQtyFloor;
 					var estCostline = parseFloat(lineValue.inccost);
 					var estcostamount = (incCostQty * estCostline)/1000;
 					estcostamount = (estcostamount)?estcostamount:0;
 					estCost = parseFloat(estCost)+estcostamount;
+					
+					log.debug('lineValue.costqtyfloor'+lineValue.item,lineValue.costqtyfloor);
 					
 					printJob.setCurrentSublistValue({
 						sublistId: 'item',
@@ -679,7 +681,7 @@ function(search, record) {
 			}
 			return false;
 		});
-		log.debug('cost record'+itemId,costRecord);
+		log.debug('cost record'+itemId,costRecordSearch.filters);
 		return costRecord;
 	}
    
