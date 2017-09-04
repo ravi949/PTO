@@ -33,7 +33,7 @@ function(message,url) {
     		deploymentId: 'customdeploy_cpm_pj_recalsuitelet3',
     		returnExternalUrl: false
     	});
-    	window.location.href = window.origin+suiteletURL+'&pjid='+pjid;
+    	window.location.href = window.origin+''+suiteletURL+'&pjid='+pjid;
     }
 
     return {
