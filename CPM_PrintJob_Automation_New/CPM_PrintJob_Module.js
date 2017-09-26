@@ -289,7 +289,7 @@ function(search, record) {
 			isDynamic: true
 		});
 
-		log.debug('objArray',objArray)
+		log.debug('objArray',objArray);
 		
 		objArray.forEach(function(lineValue){
 			try{
@@ -352,7 +352,7 @@ function(search, record) {
 					var incAmount = (incPrice * incQty)/1000;
 					incAmount = (incAmount)?incAmount:0;
 					amount = incAmount + amount;
-					
+
 					//cost incremental calculation
 					var costQtyFloor = parseFloat(lineValue.costqtyfloor);
 					var incCostQty = lineValue.quantity - costQtyFloor;
@@ -360,8 +360,6 @@ function(search, record) {
 					var estcostamount = (incCostQty * estCostline)/1000;
 					estcostamount = (estcostamount)?estcostamount:0;
 					estCost = parseFloat(estCost)+estcostamount;
-					
-					log.debug('lineValue.costqtyfloor'+lineValue.item,lineValue.costqtyfloor);
 					
 					printJob.setCurrentSublistValue({
 						sublistId: 'item',
@@ -525,6 +523,7 @@ function(search, record) {
 		
 		var priceRecord = null;
 		priceSearch.run().each(function(result){
+			log.debug('result '+itemId,result);
 			priceRecord = {};
 			if(result.id != null && result.id != ''){
 				priceRecord.price = result.getValue({name: 'custrecord_cpm_est_price_itemprice'});

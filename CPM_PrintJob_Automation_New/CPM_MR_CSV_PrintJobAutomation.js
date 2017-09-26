@@ -267,7 +267,12 @@ function(search,record,runtime,cpm) {
     							itemUnit: itemUnit,
     							itemPurchaseUnit:itemPurchaseUnit,
     							priceLevel:priceRecord.hasOwnProperty('priceLevel')?priceRecord.priceLevel:undefined,
-    							costfound:costRecord.found
+    							costfound:costRecord.found,
+    							brcItem:(brcInsertCatId == itemCategory),
+								incprice:(priceRecord.incprice)?priceRecord.incprice:0,//inc-price new column
+								priceqtyfloor:(priceRecord.priceqtyfloor)?priceRecord.priceqtyfloor:0, //inc-price new column
+								inccost:(costRecord.inccost)?costRecord.inccost:0,//inc-cost new column,
+								costqtyfloor:(costRecord.costqtyfloor)?costRecord.costqtyfloor:0 //inc-cost new column
     						});
     					} else {
     						var vendorId = (selVendor != '' && selVendor != null)? selVendor : brcVendor ; //default brc vendor
@@ -300,7 +305,12 @@ function(search,record,runtime,cpm) {
     						itemUnit: printJob.getCurrentSublistValue({sublistId : 'item', fieldId : 'unit'}),
     						itemPurchaseUnit:itemPurchaseUnit,
     						priceLevel:undefined,
-    						costfound:false
+    						costfound:false,
+    						brcItem:(brcInsertCatId == itemCategory),
+	    					incprice:0,//inc-price new column
+	    					priceqtyfloor:0, //inc-price new column
+	    	    			inccost:0,//inc-cost new column
+	    	    			costqtyfloor:0 //inc-cost new column
     					});
     				}
     			}
