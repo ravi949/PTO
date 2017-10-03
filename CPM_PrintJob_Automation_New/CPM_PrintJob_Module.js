@@ -351,7 +351,7 @@ function(search, record) {
 					var incPrice = lineValue.incprice;
 					var incAmount = (incPrice * incQty)/1000;
 					incAmount = (incAmount)?incAmount:0;
-					amount = incAmount + amount;
+					amount = incAmount + parseFloat(lineValue.price);
 
 					//cost incremental calculation
 					var costQtyFloor = parseFloat(lineValue.costqtyfloor);
@@ -359,7 +359,7 @@ function(search, record) {
 					var estCostline = parseFloat(lineValue.inccost);
 					var estcostamount = (incCostQty * estCostline)/1000;
 					estcostamount = (estcostamount)?estcostamount:0;
-					estCost = parseFloat(estCost)+estcostamount;
+					estCost = parseFloat(lineValue.cost)+estcostamount;
 					
 					printJob.setCurrentSublistValue({
 						sublistId: 'item',
