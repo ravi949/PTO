@@ -23,7 +23,7 @@
 	<td><barcode codetype="code128" showtext="true" value="${record.tranid}"/></td>
 	<td style="padding-left: 250px;"><pagenumber/> of <totalpages/></td>
 	</tr>
-	<tr><td></td><td style="padding-left: 220px;font-size:8pt">{{t:i;r:n;o:"Client";h:20;}}</td></tr>
+	<tr><td></td><td style="padding-left: 220px;font-size:8pt">{{t:i;r:y;o:"Client";h:20;}}</td></tr>
 	</table>
         </macro>
     </macrolist>
@@ -330,7 +330,20 @@
 	</li>
 </ol>
 
-<table class="body" style="width: 100%; margin-top: 10px;">
+  <br/>	
+  <table style="width: 100%; margin-top: 10px;">
+		<tr>
+			<td  class="text-tags" style="padding-left:16px;">Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{t:t;r:y;o:"Client";l:"Name";w:100;h:15;}}<br/><br/></td>
+		</tr>
+		<tr>
+			<td  class="text-tags" style="padding-left:16px;">Signature:&nbsp;&nbsp;&nbsp;&nbsp;{{t:s;r:y;o:"Client";w:100;h:15;}}<br/><br/></td>
+		</tr>
+		<tr>
+			<td  class="text-tags" style="padding-left:16px;">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{t:t;r:y;o:"Client";l:"Date";w:100;h:15;}}<br/><br/></td>
+		</tr>
+ </table>
+
+<!-- <table class="body" style="width: 100%; margin-top: 10px;">
   <tr>
 	<td align="left" colspan="2" valign="top" style="font-size: 8px;"><br /><br /><br /></td>
 	<td></td>
@@ -358,7 +371,7 @@
 	<td></td>
 	<td align="left" colspan="2" valign="top" style="font-size: 8pt; border-top: 1px solid #000000;">Date:</td>
   </tr>
-  </table>
+  </table> -->
 
 </body>
 </pdf>
