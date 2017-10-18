@@ -47,7 +47,7 @@ function(https, serverWidget, url) {
     	
     	
     	var form = serverWidget.createForm({
-    	    title : 'Signnow Documents'
+    	    title : 'SignNow Documents'
     	});
     	
 //    	var tranBodyField = form.addField({
