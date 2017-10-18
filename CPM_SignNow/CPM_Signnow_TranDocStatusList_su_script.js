@@ -41,7 +41,7 @@ function(https, serverWidget, url) {
 			    deploymentId: 'customdeploy_cpm_signnow_trandocstatusli',
 			    returnExternalUrl: false
 			});
-    		context.response.write("<html><script>window.location.href = 'https://integrations.cudasign.com/shared/#/redirect?redirect_uri='+encodeURIComponent(window.location.origin+'"+suiteletURL+"')</script></html>");
+    		context.response.write("<html><script>window.location.href = 'https://integrations.signnow.com/shared/#/redirect?redirect_uri='+encodeURIComponent(window.location.origin+'"+suiteletURL+"')</script></html>");
     		return
     	}
     	
