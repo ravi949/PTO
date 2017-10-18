@@ -5,12 +5,14 @@
  */
 define(['N/https', 
 		'N/ui/serverWidget',
-		'N/url'],
+		'N/url',
+		'N/search',
+		'N/record'],
 /**
  * @param {https} https
  * @param {serverWidget} serverWidget
  */
-function(https, serverWidget, url) {
+function(https, serverWidget, url, search, record) {
    
     /**
      * Definition of the Suitelet script trigger point.
@@ -34,8 +36,13 @@ function(https, serverWidget, url) {
     }
     
     function getMethod(context){
-    	log.debug('context.parameters',context.parameters);
-    	if(!context.request.parameters.token){
+    	var params = context.request.parameters;
+    	var recTypes = {
+    			'SalesOrd':record.Type.SALES_ORDER,
+    			'Opprtnty':record.Type.OPPORTUNITY,
+    			'Estimate':record.Type.ESTIMATE
+    	};
+    	if(!params.token){
     		var suiteletURL = url.resolveScript({
 				scriptId: 'customscript_cpm_signnow_trandocstatusli',
 			    deploymentId: 'customdeploy_cpm_signnow_trandocstatusli',
@@ -50,16 +57,32 @@ function(https, serverWidget, url) {
     	    title : 'SignNow Documents'
     	});
     	
-//    	var tranBodyField = form.addField({
-//    		label:'Select Transaction',
-//    		id:'custpage_cpm_tranlist',
-//    		type:serverWidget.FieldType.SELECT,
-//    		source:'transaction'
-//    	});
+    	var tranBodyField = form.addField({
+    		label:'Select Transaction',
+    		id:'custpage_cpm_trantypes',
+    		type:serverWidget.FieldType.SELECT
+    	});
+    	
+    	tranBodyField.addSelectOption({
+    		text:'-All-',
+    		value:'all'
+    	});
+    	tranBodyField.addSelectOption({
+    		text:'Sales Order',
+    		value:'SalesOrd'
+    	});
+    	tranBodyField.addSelectOption({
+    		text:'Print Job',
+    		value:'Opprtnty'
+    	});
+    	tranBodyField.addSelectOption({
+    		text:'Quotation',
+    		value:'Estimate'
+    	});
     	
     	form.addSubtab({
     	    id : 'custpage_cpm_docstatuslist',
-    	    label : 'Documents List'
+    	    label : 'Status List'
     	});
     	
     	var sublist = form.addSublist({
@@ -77,6 +100,12 @@ function(https, serverWidget, url) {
     	}).updateDisplayType({
     	    displayType : serverWidget.FieldDisplayType.INLINE
     	});
+    	
+    	sublist.addField({
+    	    id : 'custpage_cpm_tranlink',
+    	    type : serverWidget.FieldType.URL,
+    	    label : 'Link'
+    	}).linkText = 'Record';
     	sublist.addField({
     	    id : 'custpage_cpm_docname',
     	    type : serverWidget.FieldType.TEXT,
@@ -88,34 +117,55 @@ function(https, serverWidget, url) {
     	    label : 'Document Status'
     	});
     	
-    	var responseObj = getDocuments(context.request.parameters);
+    	var responseObj = getDocuments(params);
     	var i = 0;
     	
     	if(responseObj.code != 200){
     		context.response.write('Invalid token, Please login again.');
     	}
     	
+    	if(params.type){
+    		tranBodyField.defaultValue = params.type;
+    	}
+    	
     	responseObj.list.forEach(function(e){
-    		sublist.setSublistValue({
-    		    id : 'custpage_cpm_tranid',
-    		    line : i,
-    		    value : e.recordid
+
+    		var fieldLookUp = search.lookupFields({
+    			type:search.Type.TRANSACTION,
+    			id:e.recordid ,
+    			columns:['type']
     		});
-    		sublist.setSublistValue({
-    		    id : 'custpage_cpm_docname',
-    		    line : i,
-    		    value : e.docname
-    		});
-    		sublist.setSublistValue({
-    		    id : 'custpage_cpm_docstatus',
-    		    line : i,
-    		    value : e.status
-    		});
-    		i++;
+    		
+    		if(!params.type || params.type == 'all' || params.type == fieldLookUp.type[0].value){
+    			sublist.setSublistValue({
+        		    id : 'custpage_cpm_tranid',
+        		    line : i,
+        		    value : e.recordid
+        		});
+        		sublist.setSublistValue({
+        		    id : 'custpage_cpm_docname',
+        		    line : i,
+        		    value : e.docname
+        		});
+        		sublist.setSublistValue({
+        		    id : 'custpage_cpm_docstatus',
+        		    line : i,
+        		    value : e.status
+        		});
+        		sublist.setSublistValue({
+        			id:'custpage_cpm_tranlink',
+        			line:i,
+        			value:url.resolveRecord({
+        				recordType:recTypes[fieldLookUp.type[0].value],
+        				recordId:e.recordid
+        			})
+        		});
+        		i++;
+    		}
     	});
     	
     	
-//    	form.clientScriptModulePath = './CPM_Signnow_TranDocStatus_cs_script.js';
+    	form.clientScriptModulePath = './CPM_Signnow_TranDocStatus_cs_script.js';
     	context.response.writePage(form);
     }
     

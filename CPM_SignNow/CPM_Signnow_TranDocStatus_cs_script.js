@@ -21,13 +21,13 @@ function(url) {
      */
     function fieldChanged(scriptContext) {
     	try{
-    		if(scriptContext.fieldId == 'custpage_cpm_tranlist'){
+    		if(scriptContext.fieldId == 'custpage_cpm_trantypes'){
     			var windowURL = new URL(window.location.href);
     			var suiteletURL = url.resolveScript({
     				scriptId: 'customscript_cpm_signnow_trandocstatusli',
     			    deploymentId: 'customdeploy_cpm_signnow_trandocstatusli',
     			    returnExternalUrl: false,
-    			    params:{recid:scriptContext.currentRecord.getValue('custpage_cpm_tranlist'),
+    			    params:{type:scriptContext.currentRecord.getValue('custpage_cpm_trantypes'),
     			    		token:windowURL.searchParams.get('token')}
     			});
     			window.location.href = window.location.origin+suiteletURL;
