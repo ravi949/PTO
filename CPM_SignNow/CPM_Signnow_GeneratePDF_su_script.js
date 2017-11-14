@@ -49,7 +49,7 @@ function(https,render,url,config,file,record,runtime) {
     		var fileObj = file.load({
     			id:configRecObj.getValue('pagelogo')
     		}),
-    		imageUrl = { logoUrl: fileObj.url.replace(/&/g,'&amp;')}
+    		imageUrl = { logoUrl: fileObj.url.replace(/&/g,'&amp;') };
 
     		/******* Adding the record to HTML template  *******/
     		var myFile = render.create();
