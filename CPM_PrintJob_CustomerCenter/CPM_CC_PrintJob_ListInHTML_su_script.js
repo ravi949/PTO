@@ -33,11 +33,24 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			edate = request.parameters.ed,
     			formate = request.parameters.fid,
     			title = request.parameters.tt,
+    			region = request.parameters.region,
+    			jobCompleted = request.parameters.jbc,
+    			jobCompleted = (jobCompleted)?true:false,
+    			InternationalFlag = request.parameters.inflag,
+    			InternationalFlag = (InternationalFlag)?true:false,
+    			billed = request.parameters.billed,
+    			billed = (billed)?true:false,
     			pagedIndex = (request.parameters.indx)?request.parameters.indx:0,
     			/**Adding filter to the search based on the user actions.*/
 //    			searchFilter = [['custbody_cpm_printjob_format','noneof','@NONE@'],'and',['custbody_cpm_printjob_pagecount','noneof','@NONE@']];
-    			searchFilter =[['entity','is',userId]];
-
+    			searchFilter =[['entity','is',userId],'and',
+    						   ['custbodycompletedflag','is',jobCompleted],'and',
+    						   ['custbodyintlflag','is',InternationalFlag],'and',
+    						   ['custbodybilledflag','is',billed],'and',
+    						   ['winlossreason','noneof',[12,13]]];
+    			if(region){
+    				searchFilter.push('and',['custbody_cseg_cpm_region','is',region]);
+    			}
 
     			/**Loading Print Job search and applying the paged methods*/
     			var resultArray = [],
@@ -62,47 +75,62 @@ function(render, record, runtime, file, search,serverWidget,url) {
     				id:'custom_searchs',
     				label:' '
     			});
-    		
+    			var submitBtn = form.addField({
+    				id:'custpage_cpm_submitbtn',
+    				type: serverWidget.FieldType.INLINEHTML,
+    				label: 'Submit',
+    				container:'custom_searchs'
+    			});  			
+    			submitBtn.defaultValue = '<br/><input type="button" id="search_cpm_pj" class="btn" value="Search">'
+    				
     			var formateField = form.addField({
     				id:'custpage_cpm_format',
     				type: serverWidget.FieldType.SELECT,
     				label: 'Format',
     				source:'customlist_cpm_printformats', 
     				container:'custom_searchs'
+    			}).updateBreakType({
+    			    breakType : serverWidget.FieldBreakType.STARTROW
     			});
     			if(formate)
     				formateField.defaultValue = formate;
-    			formateField.updateLayoutType({
-    			    layoutType: serverWidget.FieldLayoutType.MIDROW
-    			});
  
     			var titleDiscField = form.addField({
     				id:'custpage_cpm_titledescription',
     				type: serverWidget.FieldType.SELECT,
     				label: 'Title / Description',
     				container:'custom_searchs'
-    			})
+    			});
     			titleDiscField.addSelectOption({
     				value:' ',
     				text:' '
-    			})
+    			});
+    			
     			var cpmTitleDiscription = search.create({
     				type:search.Type.OPPORTUNITY,
     				columns:['tranid','custbody18'],
   				         filters:[['entity','is',userId]]
 //    				         filters:[]
     			}).run().each(function(e){
-    				titleDiscField.addSelectOption({
-    					value :e.getValue('custbody18'),
-    					text : e.getValue('custbody18'),
-    					isSelected:(title == e.getValue('custbody18'))
-    				});
+    				if(e.getValue('custbody18')){
+    					titleDiscField.addSelectOption({
+    						value :e.getValue('custbody18'),
+    						text : e.getValue('custbody18'),
+    						isSelected:(title == e.getValue('custbody18'))
+    					});
+    				}
     				return true;
     			});
-
-    			titleDiscField.updateLayoutType({
-    			    layoutType: serverWidget.FieldLayoutType.MIDROW
-    			});
+    			
+    			var regionField = form.addField({
+    				id:'custpage_cpm_region',
+    				type: serverWidget.FieldType.SELECT,
+    				label: 'Region',
+    				source:'customrecord_cseg_cpm_region',
+    				container:'custom_searchs'
+    			}).updateBreakType({
+    			    breakType : serverWidget.FieldBreakType.STARTCOL
+    			}).defaultValue = (region)?region:'';
     			var startDateField = form.addField({
     				id:'custpage_cpm_startdate',
     				type: serverWidget.FieldType.DATE,
@@ -111,9 +139,7 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			});
     			if(sdate)
     				startDateField.defaultValue = sdate;
-    			startDateField.updateLayoutType({
-    			    layoutType: serverWidget.FieldLayoutType.MIDROW
-    			});
+
     			var endDateField = form.addField({
     				id:'custpage_cpm_enddate',
     				type: serverWidget.FieldType.DATE,
@@ -122,18 +148,33 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			});
     			if(edate)
     				endDateField.defaultValue = edate;
-    			endDateField.updateLayoutType({
-    			    layoutType: serverWidget.FieldLayoutType.MIDROW
+    			
+    			var jobCompletedField = form.addField({
+    				id:'custpage_cpm_jobcompleted',
+    				type: serverWidget.FieldType.CHECKBOX,
+    				label: 'Job Completed Flag',
+    				container:'custom_searchs'
+    			}).updateBreakType({
+    			    breakType : serverWidget.FieldBreakType.STARTCOL
     			});
-
-    			var submitBtn = form.addField({
-    				id:'custpage_cpm_submitbtn',
-    				type: serverWidget.FieldType.INLINEHTML,
-    				label: 'Submit',
+    			jobCompletedField.defaultValue = (jobCompleted)?'T':'F';
+    			
+    			var InternationalFlagField = form.addField({
+    				id:'custpage_cpm_internationalflag',
+    				type: serverWidget.FieldType.CHECKBOX,
+    				label: 'International Flag',
     				container:'custom_searchs'
     			});
-    			submitBtn.defaultValue = '<input type="button" id="search_cpm_pj" class="btn" value="Search">'
-
+    			InternationalFlagField.defaultValue = (InternationalFlag)?'T':'F';
+    			
+    			var billedFlagField = form.addField({
+    				id:'custpage_cpm_billedflag',
+    				type: serverWidget.FieldType.CHECKBOX,
+    				label: 'Billed Flag',
+    				container:'custom_searchs'
+    			});
+    			billedFlagField.defaultValue = (billed)?'T':'F';
+    			
     				
     			// Getting the suite script URL by using the script parameter to show record 
     			var scriptObj = runtime.getCurrentScript(),
@@ -185,11 +226,23 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			edate = request.parameters.custpage_cpm_enddate,
     			formate = request.parameters.custpage_cpm_format,
     			title = request.parameters.custpage_cpm_titledescription,
-    			
+    			region = request.parameters.custpage_cpm_region,
+    			jobCompleted = request.parameters.custpage_cpm_jobcompleted;
+    			InternationalFlag = request.parameters.custpage_cpm_internationalflag,
+    			billed = request.parameters.custpage_cpm_billedflag,
+    			billed = (billed)?true:false,
+    			jobCompleted = (jobCompleted)?true:false,
+    			InternationalFlag = (InternationalFlag)?true:false,
 //    			searchFilter = [['custbody_cpm_printjob_format','noneof','@NONE@'],'and',['custbody_cpm_printjob_pagecount','noneof','@NONE@']];
-    			searchFilter =[['entity','is',userId]];		
+    			searchFilter =[['entity','is',userId],'and',
+    						   ['custbodycompletedflag','is',jobCompleted],'and',
+    						   ['custbodyintlflag','is',InternationalFlag],'and',
+    						   ['custbodybilledflag','is',billed],'and',
+    						   ['winlossreason','noneof',[12,13]]];		
     					
-    			
+    			if(region){
+    				searchFilter.push('and',['custbody_cseg_cpm_region','is',region]);
+    			}
 	    			
     			/**Loading Print Job search and applying the paged methods*/
     			var result = getResult(searchFilter,formate,title,sdate),
