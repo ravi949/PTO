@@ -13,12 +13,12 @@ function(url,format) {
 		/**If user clicks the Search button then append the search field values to the url and reloads the page and returns required results*/
 		jQuery('#search_cpm_pj').on('click',function(){
 			console.log(scriptContext.currentRecord.getValue('custpage_cpm_customer'))
-			filterSearch(scriptContext)
+			filterSearch(scriptContext);
 		});		
 		/**If user changes the pagination field then This event triggered and change the Print Job list*/
 		jQuery('#custbody_pagination').on('change',function(){
 			console.log(scriptContext.currentRecord.getValue('custbody_pagination'));
-			filterSearch(scriptContext)
+			filterSearch(scriptContext);
 		});
 	}
     
@@ -35,17 +35,6 @@ function(url,format) {
      * @since 2015.2
      */
     function fieldChanged(scriptContext) {
-    	var rec = scriptContext.currentRecord;
-    	var sDate = rec.getValue('custpage_cpm_startdate'),
-    	eDate = rec.getValue('custpage_cpm_enddate');
-    	/**Setting the End date as Start date */
-    	if(scriptContext.fieldId=='custpage_cpm_startdate'){
-    		rec.setValue({
-        	    fieldId: 'custpage_cpm_enddate',
-        	    value: sDate,
-        	    ignoreFieldChange: true
-        	});
-    	}
     }
 
     //filter the search based on parameters
@@ -66,14 +55,14 @@ function(url,format) {
     		console.log('formate '+fmtId);
     	}
     	if(title !=' '){
-    		stringUrl += '&tt='+title;
+    		stringUrl += '&title='+title;
     		console.log('title '+title);
     	}
     	if(sDate){
     		var startDate = format.format({
-    		    value: sDate,
-    		    type: format.Type.DATE
-    		    });
+    			value: sDate,
+    			type: format.Type.DATE
+    		});
     		stringUrl += '&sd='+startDate;
     		console.log('Start Date '+startDate);
     	}
@@ -81,18 +70,18 @@ function(url,format) {
     		var endDate = format.format({
     		    value: eDate,
     		    type: format.Type.DATE
-    		    });
+    		});
     		stringUrl += '&ed='+endDate;
     		console.log('End Date '+endDate);
     	}
     	if(jbc){
-    		stringUrl += '&jbc='+jbc;
+    		stringUrl += '&jbcflag='+jbc;
     	}
     	if(inflag){
     		stringUrl += '&inflag='+inflag;
     	}
     	if(billed){
-    		stringUrl += '&billed='+billed;
+    		stringUrl += '&bilflag='+billed;
     	}
     	if(region){
     		stringUrl += '&region='+region;
@@ -107,7 +96,6 @@ function(url,format) {
     	    deploymentId: 'customdeploy_cpm_pj_listview_inhtml',
     	    returnExternalUrl: false
     	});
-//    	if(stringUrl)
     	window.location.href = output+stringUrl;
     }
     
@@ -117,7 +105,6 @@ function(url,format) {
 
     return {
     	pageInit:pageInit,
-        fieldChanged: fieldChanged,
         downloadCSV:downloadCSV
     };
     

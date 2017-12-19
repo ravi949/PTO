@@ -32,13 +32,13 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			sdate = request.parameters.sd,
     			edate = request.parameters.ed,
     			formate = request.parameters.fid,
-    			title = request.parameters.tt,
+    			title = request.parameters.title,
     			region = request.parameters.region,
-    			jobCompleted = request.parameters.jbc,
+    			jobCompleted = request.parameters.jbcflag,
     			jobCompleted = (jobCompleted)?true:false,
     			InternationalFlag = request.parameters.inflag,
     			InternationalFlag = (InternationalFlag)?true:false,
-    			billed = request.parameters.billed,
+    			billed = request.parameters.bilflag,
     			billed = (billed)?true:false,
     			pagedIndex = (request.parameters.indx)?request.parameters.indx:0,
     			/**Adding filter to the search based on the user actions.*/
@@ -81,7 +81,7 @@ function(render, record, runtime, file, search,serverWidget,url) {
     				label: 'Submit',
     				container:'custom_searchs'
     			});  			
-    			submitBtn.defaultValue = '<br/><input type="button" id="search_cpm_pj" class="btn" value="Search">'
+    			submitBtn.defaultValue = '<br/><button type="button" class="btn" id="search_cpm_pj">Search</button>'
     				
     			var formateField = form.addField({
     				id:'custpage_cpm_format',
