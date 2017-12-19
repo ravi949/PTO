@@ -109,7 +109,7 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			var cpmTitleDiscription = search.create({
     				type:search.Type.OPPORTUNITY,
     				columns:['tranid','custbody18'],
-  				         filters:[['entity','is',userId]]
+  				         filters:searchFilter
 //    				         filters:[]
     			}).run().each(function(e){
     				if(e.getValue('custbody18')){
