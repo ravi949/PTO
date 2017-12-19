@@ -14,12 +14,12 @@ function(url,format) {
 		jQuery('#search_cpm_pj').on('click',function(){
 			console.log(scriptContext.currentRecord.getValue('custpage_cpm_customer'))
 			filterSearch(scriptContext)
-		})		
+		});		
 		/**If user changes the pagination field then This event triggered and change the Print Job list*/
 		jQuery('#custbody_pagination').on('change',function(){
 			console.log(scriptContext.currentRecord.getValue('custbody_pagination'));
 			filterSearch(scriptContext)
-		})
+		});
 	}
     
     /**
@@ -56,30 +56,46 @@ function(url,format) {
     	sDate = rec.getValue('custpage_cpm_startdate'),
     	eDate = rec.getValue('custpage_cpm_enddate'),
     	searchIndex = rec.getValue('custbody_pagination'),
+    	jbc = rec.getValue('custpage_cpm_jobcompleted'),
+    	inflag = rec.getValue('custpage_cpm_internationalflag'),
+    	billed = rec.getValue('custpage_cpm_billedflag'),
+    	region = rec.getValue('custpage_cpm_region'),
     	stringUrl = '';
     	if(fmtId){
-    		stringUrl += '&fid='+fmtId
-    		console.log('formate '+fmtId)
+    		stringUrl += '&fid='+fmtId;
+    		console.log('formate '+fmtId);
     	}
     	if(title !=' '){
-    		stringUrl += '&tt='+title
-    		console.log('title '+title)
+    		stringUrl += '&tt='+title;
+    		console.log('title '+title);
     	}
     	if(sDate){
     		var startDate = format.format({
     		    value: sDate,
     		    type: format.Type.DATE
     		    });
-    		stringUrl += '&sd='+startDate
-    		console.log('Start Date '+startDate)
+    		stringUrl += '&sd='+startDate;
+    		console.log('Start Date '+startDate);
     	}
     	if(eDate){
     		var endDate = format.format({
     		    value: eDate,
     		    type: format.Type.DATE
     		    });
-    		stringUrl += '&ed='+endDate
-    		console.log('End Date '+endDate)
+    		stringUrl += '&ed='+endDate;
+    		console.log('End Date '+endDate);
+    	}
+    	if(jbc){
+    		stringUrl += '&jbc='+jbc;
+    	}
+    	if(inflag){
+    		stringUrl += '&inflag='+inflag;
+    	}
+    	if(billed){
+    		stringUrl += '&billed='+billed;
+    	}
+    	if(region){
+    		stringUrl += '&region='+region;
     	}
     	
     	if(searchIndex != ''){

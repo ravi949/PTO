@@ -229,8 +229,10 @@
 	<tr>
 	<th colspan="12">${item.item@label}</th>
 	<th align="center" colspan="3">${item.quantity@label}</th>
-	<th colspan="3">${item.units@label}</th>
+	<th align="center" colspan="3">Inc Qty</th>
+	<th align="center" colspan="3">${item.units@label}</th>
 	<th align="right" colspan="4">${item.rate@label}</th>
+	<th align="center" colspan="4">Inc Price</th>
 	<th align="right" colspan="4">${item.amount@label}</th>
 	</tr>
 </thead>
@@ -238,9 +240,11 @@
   <#if item.rate != 0 && item.amount != 0>
   <tr>
 	<td colspan="12"><span align="left">${item.custcol_cpm_itemdisplayname}</span></td>
-	<td align="right" colspan="3" line-height="100%">${item.quantity}</td>
-	<td colspan="3" style="padding-left:5px;">${item.units}</td>
+	<td align="center" colspan="3" line-height="100%">${item.quantity}</td>
+	<td align="center" colspan="3">${item.custcol_cpm_incpriceqty}</td>
+	<td align="center" colspan="3">${item.units}</td>
 	<td align="right" colspan="4">${item.rate?string['0.000000']}</td>
+	<td align="center" colspan="4">${item.custcol_cpm_incprice}</td>
 	<td align="right" colspan="4">${item.amount}</td>
 	</tr></#if>
 	</#list><!-- end items --></table>
