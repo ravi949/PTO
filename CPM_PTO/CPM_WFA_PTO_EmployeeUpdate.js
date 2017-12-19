@@ -2,9 +2,9 @@
  * @NApiVersion 2.x
  * @NScriptType workflowactionscript
  */
-define(['N/record'],
+define(['N/record','N/runtime'],
 
-		function(record) {
+		function(record,runtime) {
 
 	/**
 	 * Definition of the Suitelet script trigger point.
@@ -24,7 +24,10 @@ define(['N/record'],
 			var empId = ptoObj.getValue({
 				fieldId : 'custrecord_cpm_parent'
 			});
-			var empname = ptoObj.getText({
+			var empname = ptoObj.getValue({
+				fieldId : 'custrecord_cpm_parent'
+			});
+			var Empname = ptoObj.getText({
 				fieldId : 'custrecord_cpm_parent'
 			});
 			log.debug('empId',empId);
@@ -85,14 +88,14 @@ define(['N/record'],
 
 			// Saving Employee Record
 
-
+			var scriptObj = runtime.getCurrentScript();
 			var eventRecord = record.create({
 				type: record.Type.CALENDAR_EVENT, 
-				isDynamic: true
+				isDynamic: false
 			});
 			eventRecord.setValue({
 				fieldId: 'title',
-				value: empname+'On Vacation',
+				value: Empname+' on PTO',
 				ignoreFieldChange: true
 			});
 			eventRecord.setValue({
@@ -113,18 +116,47 @@ define(['N/record'],
 			});
 			eventRecord.setValue({
 				fieldId: 'frequency',
-				value: 'DAY'				
+				value: 'WEEK'				
 			});
 			eventRecord.setValue({
 				fieldId: 'period',
 				value: '1',
 				ignoreFieldChange: true
 			});
+			eventRecord.setValue({
+				fieldId:'recurrencedowmask',
+				value:"FTTTTTF"
+			});
 
 			eventRecord.setValue({
 				fieldId: 'endbydate',
 				value: new Date(leaveEndDate),
 				ignoreFieldChange: true
+			});	
+//			eventRecord.setSublistValue({
+//				sublistId: 'attendee',
+//				fieldId: 'attendee',
+//				line: 1,
+//				value: empname
+//			});
+//			eventRecord.setSublistValue({
+//				sublistId: 'attendee',
+//				fieldId: 'response',
+//				line: 1,
+//				value: 'ACCEPTED'
+//			});
+			
+			eventRecord.setSublistValue({
+				sublistId: 'attendee',
+				fieldId: 'attendee',
+				line: 0,
+				value: scriptObj.getParameter({name: 'custscript_cpm_pto_groupid'})
+			});
+			eventRecord.setSublistValue({
+				sublistId: 'attendee',
+				fieldId: 'response',
+				line: 0,
+				value: 'ACCEPTED'
 			});
 			var recordId = eventRecord.save({
 				enableSourcing: false,

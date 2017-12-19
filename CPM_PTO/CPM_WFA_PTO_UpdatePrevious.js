@@ -115,7 +115,7 @@ define(['N/record','N/search'],
 			var today =new Date();
 			eventRecord.setValue({
 				fieldId: 'frequency',
-				value: 'DAY',
+				value: 'WEEK',
 				ignoreFieldChange: true
 			});
 			eventRecord.setValue({
@@ -123,6 +123,10 @@ define(['N/record','N/search'],
 				value: '1',
 				ignoreFieldChange: true
 			});
+			eventRecord.setValue({
+		        fieldId:'recurrencedowmask',
+		        value:"FTTTTTF"
+		      });
 			eventRecord.setValue({
 				fieldId: 'endbydate',
 				value: today,
