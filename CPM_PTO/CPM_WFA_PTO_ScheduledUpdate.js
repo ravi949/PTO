@@ -19,8 +19,8 @@ define(['N/record'],
 			var context = scriptContext.newRecord;
 			log.debug('context',context);
 			// Getting Employee ID and leaveDuration from Context
-			var empId = context.getText({
-				fieldId : 'ownerid',
+			var empId = context.getValue({
+				fieldId : 'custrecord_cpm_parent',
 			});
 			var leaveDuration = context.getValue({
 				fieldId : 'custrecord_cpm_leave_duration',
@@ -41,19 +41,6 @@ define(['N/record'],
 			});
 			log.debug('pending',pending);
 
-			var today = new Date();
-			var dd = today.getDate();
-			var mm = today.getMonth()+1; //January is 0!
-			var yyyy = today.getFullYear();
-
-			if(dd<10) {
-				dd = '0'+dd
-			} 
-			if(mm<10) {
-				mm = '0'+mm
-			}
-			today = mm + '/' + dd + '/' + yyyy;
-			log.debug('today',today);
 
 			var objEmpRecord = record.load({
 				type: record.Type.EMPLOYEE,
@@ -69,23 +56,14 @@ define(['N/record'],
 
 			var totalLeaves = parseFloat(numberOfLeaves) + parseFloat(leaveDuration);
 
-
-			if(today == leaveStartDate){
-				log.debug('Hello','Triggered If Condition');
-				var objLeavesTaken = objEmpRecord.setValue({
-					fieldId: 'custentitycpm_leavestaken',
-					value: totalLeaves
-				});
-				log.debug('objLeavesTaken',objLeavesTaken);
-				var recordId = objEmpRecord.save({
-					enableSourcing: true,
-					ignoreMandatoryFields: true
-				});
-			}
-
-
-
-
+			var objLeavesTaken = objEmpRecord.setValue({
+				fieldId: 'custentitycpm_leavestaken',
+				value: totalLeaves
+			});		
+			var recordId = objEmpRecord.save({
+				enableSourcing: true,
+				ignoreMandatoryFields: true
+			});
 
 		}catch(e){
 			log.debug(e.name,e.message);
