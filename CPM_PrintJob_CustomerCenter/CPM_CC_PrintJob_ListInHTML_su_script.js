@@ -344,6 +344,7 @@ function(render, record, runtime, file, search,serverWidget,url) {
 			         ,'custbodydteprint'
 			         ,'custbodydteship1'
 			         ,'custbodydteship2'
+			         ,'winlossreason'
 			         ],
 			         filters:searchFilter
 		})
