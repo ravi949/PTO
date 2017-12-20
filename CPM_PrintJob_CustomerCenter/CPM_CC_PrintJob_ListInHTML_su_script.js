@@ -44,12 +44,18 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			/**Adding filter to the search based on the user actions.*/
 //    			searchFilter = [['custbody_cpm_printjob_format','noneof','@NONE@'],'and',['custbody_cpm_printjob_pagecount','noneof','@NONE@']];
     			searchFilter =[['entity','is',userId],'and',
-    						   ['custbodycompletedflag','is',jobCompleted],'and',
-    						   ['custbodyintlflag','is',InternationalFlag],'and',
-    						   ['custbodybilledflag','is',billed],'and',
     						   ['winlossreason','noneof',[12,13]]];
     			if(region){
     				searchFilter.push('and',['custbody_cseg_cpm_region','is',region]);
+    			}
+    			if(jobCompleted){
+    				searchFilter.push('and',['custbodycompletedflag','is',jobCompleted]);
+    			}
+    			if(InternationalFlag){
+    				searchFilter.push('and', ['custbodyintlflag','is',InternationalFlag]);
+    			}
+    			if(billed){
+    				searchFilter.push('and', ['custbodybilledflag','is',billed]);
     			}
 
     			/**Loading Print Job search and applying the paged methods*/
@@ -235,13 +241,19 @@ function(render, record, runtime, file, search,serverWidget,url) {
     			InternationalFlag = (InternationalFlag)?true:false,
 //    			searchFilter = [['custbody_cpm_printjob_format','noneof','@NONE@'],'and',['custbody_cpm_printjob_pagecount','noneof','@NONE@']];
     			searchFilter =[['entity','is',userId],'and',
-    						   ['custbodycompletedflag','is',jobCompleted],'and',
-    						   ['custbodyintlflag','is',InternationalFlag],'and',
-    						   ['custbodybilledflag','is',billed],'and',
     						   ['winlossreason','noneof',[12,13]]];		
     					
     			if(region){
     				searchFilter.push('and',['custbody_cseg_cpm_region','is',region]);
+    			}
+    			if(jobCompleted){
+    				searchFilter.push('and',['custbodycompletedflag','is',jobCompleted]);
+    			}
+    			if(InternationalFlag){
+    				searchFilter.push('and', ['custbodyintlflag','is',InternationalFlag]);
+    			}
+    			if(billed){
+    				searchFilter.push('and', ['custbodybilledflag','is',billed]);
     			}
 	    			
     			/**Loading Print Job search and applying the paged methods*/
