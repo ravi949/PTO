@@ -156,14 +156,15 @@ function(runtime, redirect, serverWidget) {
     		if (sc.type == sc.UserEventType.CREATE || sc.type == sc.UserEventType.EDIT || sc.type == sc.UserEventType.COPY){
     			var printJob = sc.newRecord,
     			format = printJob.getValue({fieldId:'custbody_cpm_printjob_format'}),
-    			pageCount = printJob.getValue({fieldId:'custbody_cpm_printjob_pagecount'});
+    			pageCount = printJob.getValue({fieldId:'custbody_cpm_printjob_pagecount'}),
+    			doNotEstimate = printJob.getValue({fieldId:'custbody_cpm_donotestimate'});
     			
     			var automationStatus = printJob.getValue({fieldId:'custbody_cpm_automationstatus'});
     			if (sc.type == sc.UserEventType.COPY) {
     				printJob.setValue({fieldId:'custbody_cpm_automationstatus', value:'1'});
     				printJob.save();
     			}
-    			if(automationStatus != '2' && automationStatus != '3'){
+    			if(automationStatus != '2' && automationStatus != '3' && !doNotEstimate){
     				log.debug('custbody_cpm_printjob_format',format);
     				log.debug('pageCount',pageCount);
     				if(format != '' && pageCount != '' ){
