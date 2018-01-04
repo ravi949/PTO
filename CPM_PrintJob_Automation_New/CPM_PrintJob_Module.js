@@ -301,6 +301,11 @@ function(search, record) {
 				
 				var estCost = 0,rate = 0, amount = 0;
 				lineValue.priceLevel = (lineValue.priceLevel)?lineValue.priceLevel:-1
+				lineValue.spoilage = parseFloat(lineValue.spoilage);
+				
+				if(lineValue.spoilage > 0){
+					lineValue.quantity = (1+parseFloat(lineValue.spoilage)/100)*parseFloat(lineValue.quantity);
+				}
 				
 				if (lineValue.itemPurchaseUnit == perThousandId){  //equal to per 1000
 					estCost = lineValue.quantity * ((parseFloat(lineValue.cost))/1000);
