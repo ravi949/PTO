@@ -125,7 +125,9 @@ function(runtime, redirect, serverWidget) {
     			} else if (equipment != oldEquipment){
     				flag = true;
     			}
-
+    			
+    			flag = (format != '' && pageCount != '');
+    			
     			if (flag){
     				printJob.setValue({
     					fieldId : 'custbody_cpm_automationstatus',
