@@ -105,6 +105,7 @@ function(search,record,runtime,cpm) {
         		}
         	}
     	}catch(ex){
+    		cpm.setFailed(pjid);
     		log.debug('exception in map',ex.message);
     	}
     }
@@ -318,6 +319,7 @@ function(search,record,runtime,cpm) {
     			cpm.setCompleted(printJobId);
     		}
     	}catch(ex){
+    		cpm.setFailed(printJobId);
     		log.debug('exception in reduce',ex.message);
     	}
     }
