@@ -83,6 +83,10 @@ function(runtime, redirect, serverWidget) {
     function beforeSubmit(sc) {
     	try{
     		var ec = runtime.executionContext;
+    		var flag = false;
+    		var format = printJob.getValue({fieldId:'custbody_cpm_printjob_format'});
+    		var pageCount = printJob.getValue({fieldId:'custbody_cpm_printjob_pagecount'});
+    		
     		if (ec == runtime.ContextType.SUITELET) return;
     		var oldPrintJob = sc.oldRecord, printJob = sc.newRecord;
     		if (sc.type == sc.UserEventType.EDIT){
@@ -91,9 +95,7 @@ function(runtime, redirect, serverWidget) {
     			oldVendor = oldPrintJob.getValue({fieldId:'custbodyvndrawarder'}),
     			vendor = printJob.getValue({fieldId:'custbodyvndrawarder'}),
     			oldFormat = oldPrintJob.getValue({fieldId:'custbody_cpm_printjob_format'}),
-    			format = printJob.getValue({fieldId:'custbody_cpm_printjob_format'}),
     			oldPageCount = oldPrintJob.getValue({fieldId:'custbody_cpm_printjob_pagecount'}),
-    			pageCount = printJob.getValue({fieldId:'custbody_cpm_printjob_pagecount'}),
     			oldPages = oldPrintJob.getValue({fieldId:'custbodypages'}),
     			pages = printJob.getValue({fieldId:'custbodypages'}),
     			oldQty = oldPrintJob.getValue({fieldId:'custbodyestqty'}),
@@ -103,8 +105,8 @@ function(runtime, redirect, serverWidget) {
     			oldVersions = oldPrintJob.getValue({fieldId:'custbody_cpm_printjob_versions'}),
     			versions = printJob.getValue({fieldId:'custbody_cpm_printjob_versions'}),
     			oldEquipment = oldPrintJob.getValue({fieldId:'custbody_cpm_printjob_equipment'}),
-    			equipment = printJob.getValue({fieldId:'custbody_cpm_printjob_equipment'}),
-    			flag = false;
+    			equipment = printJob.getValue({fieldId:'custbody_cpm_printjob_equipment'});
+    			
 
     			if (company != oldCompany){
     				flag = true;
@@ -125,16 +127,19 @@ function(runtime, redirect, serverWidget) {
     			} else if (equipment != oldEquipment){
     				flag = true;
     			}
-    			
-    			flag = (format != '' && pageCount != '');
-    			
-    			if (flag){
-    				printJob.setValue({
-    					fieldId : 'custbody_cpm_automationstatus',
-    					value : '1'
-    				});
-    			}
     		}
+    		
+    		if(sc.type == sc.UserEventType.CREATE){
+    			flag = (format != '' && pageCount != '');
+    		}
+    		
+			if (flag){
+				printJob.setValue({
+					fieldId : 'custbody_cpm_automationstatus',
+					value : '1'
+				});
+			}
+			
 		} catch (ex) {
 			log.error(ex.name, ex.message);
 			return false;
@@ -153,6 +158,7 @@ function(runtime, redirect, serverWidget) {
     function afterSubmit(sc) {
     	try{
     		var ec = runtime.executionContext;
+    		var flag = false;
     		if (ec == runtime.ContextType.SUITELET) return;
 
     		if (sc.type == sc.UserEventType.CREATE || sc.type == sc.UserEventType.EDIT || sc.type == sc.UserEventType.COPY){
@@ -162,11 +168,14 @@ function(runtime, redirect, serverWidget) {
     			doNotEstimate = printJob.getValue({fieldId:'custbody_cpm_donotestimate'});
     			
     			var automationStatus = printJob.getValue({fieldId:'custbody_cpm_automationstatus'});
-    			if (sc.type == sc.UserEventType.COPY) {
-    				printJob.setValue({fieldId:'custbody_cpm_automationstatus', value:'1'});
-    				printJob.save();
-    			}
-    			if(automationStatus != '2' && automationStatus != '3' && !doNotEstimate){
+//    			if (sc.type == sc.UserEventType.COPY) {
+//    				printJob.setValue({fieldId:'custbody_cpm_automationstatus', value:'1'});
+//    				printJob.save();
+//    			}
+    			
+    			flag = (format != '' && pageCount != '');
+    			
+    			if(flag && automationStatus != '2' && automationStatus != '3' && !doNotEstimate){
     				log.debug('custbody_cpm_printjob_format',format);
     				log.debug('pageCount',pageCount);
     				if(format != '' && pageCount != '' ){
