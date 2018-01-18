@@ -102,7 +102,11 @@ function(search,record,runtime,cpm) {
         				mfgBrcItemId:mfgBRCItemId
         			});
         			context.write(pjid,value);
+        		}else{
+        			cpm.setFailed(pjid);
         		}
+        	}else{
+        		cpm.setFailed(pjid);
         	}
     	}catch(ex){
     		cpm.setFailed(pjid);
@@ -317,6 +321,8 @@ function(search,record,runtime,cpm) {
     			}
     			var completed = cpm.setLineValues(printJobId, lineValues, eachId, perJobId, perThousandId,mfgBrcItemId);
     			cpm.setCompleted(printJobId);
+    		}else{
+    			cpm.setFailed(printJobId);
     		}
     	}catch(ex){
     		cpm.setFailed(printJobId);
