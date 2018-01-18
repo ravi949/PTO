@@ -321,8 +321,6 @@ function(search,record,runtime,cpm) {
     			}
     			var completed = cpm.setLineValues(printJobId, lineValues, eachId, perJobId, perThousandId,mfgBrcItemId);
     			cpm.setCompleted(printJobId);
-    		}else{
-    			cpm.setFailed(printJobId);
     		}
     	}catch(ex){
     		cpm.setFailed(printJobId);
