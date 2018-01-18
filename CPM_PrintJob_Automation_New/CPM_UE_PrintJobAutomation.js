@@ -105,7 +105,9 @@ function(runtime, redirect, serverWidget) {
     			oldVersions = oldPrintJob.getValue({fieldId:'custbody_cpm_printjob_versions'}),
     			versions = printJob.getValue({fieldId:'custbody_cpm_printjob_versions'}),
     			oldEquipment = oldPrintJob.getValue({fieldId:'custbody_cpm_printjob_equipment'}),
-    			equipment = printJob.getValue({fieldId:'custbody_cpm_printjob_equipment'});
+    			equipment = printJob.getValue({fieldId:'custbody_cpm_printjob_equipment'}),
+    			oldDoNotEstimate = oldPrintJob.getValue({fieldId:'custbody_cpm_donotestimate'}),
+    			doNotEstimate = printJob.getValue({fieldId:'custbody_cpm_donotestimate'});
     			
 
     			if (format != oldFormat){
@@ -126,6 +128,8 @@ function(runtime, redirect, serverWidget) {
     				flag = true;
     			} else if (vendor != oldVendor){
     				flag = true;
+    			}else if(doNotEstimate != oldDoNotEstimate){
+    				flag = !doNotEstimate;
     			}
     		}
     		
