@@ -74,7 +74,7 @@ function(https,render,url,config,file,record,runtime) {
     		headers["Authorization"] = 'Bearer ' + auth;
     		headers["Content-Type"] = 'text/plain;charset=UTF-8';
 
-    		var rurl = "https://integrations.cudasign.com/netsuite/document/" + documentName + ".pdf/application%2Fpdf/" + recordId
+    		var rurl = "https://integrations.signnow.com/netsuite/document/" + documentName + ".pdf/application%2Fpdf/" + recordId
 
     		var res = https.request({
     			method: https.Method.POST,
@@ -91,7 +91,7 @@ function(https,render,url,config,file,record,runtime) {
     			deploymentId:'customdeploy_signnow_deploy_closeiframe', 
     			returnExternalUrl:false
     		});
-    		response.write('<script>window.location = "https://app.cudasign.com/webapp/document/'+res.body+'?invite=true&access_token=' +auth+ '&redirect_uri=' + encodeURIComponent('https://' + request.url.split('/')[2] + closeIframePage) + '"</script>');
+    		response.write('<script>window.location = "https://app.signnow.com/webapp/document/'+res.body+'?invite=true&access_token=' +auth+ '&redirect_uri=' + encodeURIComponent('https://' + request.url.split('/')[2] + closeIframePage) + '"</script>');
 
     	}catch(e){
     		log.error('e',e)

@@ -49,13 +49,12 @@ function getRecordName(recordId) {
 		if(documentName == '' || documentName=='undefined' || documentName == "null"){
 			alert("Give a name to the document.");
 			return;
-		}
-		else{
+		}else{
 			documentName = documentName.replace(/ /g,'_');
 			var createPdfUrl = nlapiResolveURL('SUITELET', 'customscript_cpm_signnow_generatepdf', 'customdeploy_cpm_signnow_generatepdf', false);
 			console.log(createPdfUrl)
 //			// var myUrl ='https://testsignnowapp.herokuapp.com/shared/#/redirect?redirect_uri=' + encodeURIComponent(window.location.origin+createPdfUrl + '&id=' + recordId + '&docName=' + documentName);
-			var myUrl ='https://integrations.cudasign.com/shared/#/redirect?redirect_uri=' + encodeURIComponent(window.location.origin+createPdfUrl + '&id=' + recordId + '&docName=' + documentName+'&type='+recordType);
+			var myUrl ='https://integrations.signnow.com/shared/#/redirect?redirect_uri=' + encodeURIComponent(window.location.origin+createPdfUrl + '&id=' + recordId + '&docName=' + documentName+'&type='+recordType);
 			var modalHtml = '<div class="iframe-modal" style="overflow:hidden; border-radius: 0.5rem; position:fixed; top:50px; right:50px; bottom:50px; left:50px; background:#fff; z-index:1002; box-shadow:#000 0px 0px 20px"><iframe src="'+myUrl+'" frameborder="0" style="width:100%; height:100%; position:absolute; margin:0; padding:0;"></iframe></div>';
 			jQuery("body").append(modalHtml);
 		}
